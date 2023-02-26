@@ -6,8 +6,8 @@ public class Main {
         AVLTree.insert(7);
         AVLTree.insert(12);
 
-        for (int i = 0; i < 1000000; i++){
-            AVLTree.insert((int)Math.floor(Math.random() * (1000000 - 2 + 1) + 2));
+        for (int i = 0; i < 10000000; i++){
+            AVLTree.insert((int)Math.floor(Math.random() * (10000000 - 2 + 1) + 2));
         }
 
         AVLTree.inorder();

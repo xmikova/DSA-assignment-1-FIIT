@@ -21,6 +21,14 @@ public class AVLTree {
         root = null;
     }
 
+    public int height(AVLTreeNode root) {
+        if (root == null) {
+            return -1;  // null node has height -1
+        } else {
+            return root.height;
+        }
+    }
+
     void insert(int element)  {
         root = insert(root, element);
     }
@@ -38,6 +46,12 @@ public class AVLTree {
         else if (element > root.element)    //insert in the right subtree
             root.right = insert(root.right, element);
         // return pointer
+
+        root.height = 1 + Math.max(height(root.left), height(root.right));
+
+        // Balance the current node
+        root = BalanceAVLTree(root);
+
         return root;
 
     }
@@ -80,6 +94,53 @@ public class AVLTree {
             root = root.left;
         }
         return MinVal;
+    }
+
+    public AVLTreeNode BalanceAVLTree(AVLTreeNode root) {
+
+        if ((height(root.left) - height(root.right) > 1) && (height(root.left.left) > height(root.left.right))) {
+            root = AVLTreeRightRotation(root);
+        } else if ((height(root.left) - height(root.right) > 1) &&(height(root.left.left) < height(root.left.right))) {
+            root = AVLTreeLeftRightRotation(root);
+        } else if ((height(root.left) - height(root.right) < -1) && (height(root.right.left) < height(root.right.right))){
+            root = AVLTreeLeftRotation(root);
+        } else if ((height(root.left) - height(root.right) < -1) &&  (height(root.right.left) > height(root.right.right))) {
+            root = AVLTreeRightLeftRotation(root);
+        }
+
+        return root;
+    }
+
+    public AVLTreeNode AVLTreeRightRotation(AVLTreeNode root){
+        AVLTreeNode temp = root.left;
+        root.left = temp.right;
+        temp.right = root;
+
+        root.height = 1 + Math.max(height(root.left), height(root.right));
+        temp.height = 1 + Math.max(height(temp.left), height(temp.right));
+
+        return temp;
+    }
+
+    public AVLTreeNode AVLTreeLeftRotation(AVLTreeNode root){
+        AVLTreeNode temp = root.right;
+        root.right = temp.left;
+        temp.left = root;
+
+        root.height = 1 + Math.max(height(root.left), height(root.right));
+        temp.height = 1 + Math.max(height(temp.left), height(temp.right));
+
+        return temp;
+    }
+
+    public AVLTreeNode AVLTreeLeftRightRotation(AVLTreeNode root) {
+        root.left = AVLTreeLeftRotation(root.left);
+        return AVLTreeRightRotation(root);
+    }
+
+    public AVLTreeNode AVLTreeRightLeftRotation(AVLTreeNode root) {
+        root.right = AVLTreeRightRotation(root.right);
+        return AVLTreeLeftRotation(root);
     }
 
     void inorder() {
