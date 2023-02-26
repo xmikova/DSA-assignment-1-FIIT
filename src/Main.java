@@ -12,7 +12,7 @@ public class Main {
 
         AVLTree.inorder();
         System.out.println("\n");
-        AVLTree.delete(8999);
+        AVLTree.delete(899);
         AVLTree.inorder();
 
     }
