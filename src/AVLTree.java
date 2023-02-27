@@ -143,6 +143,26 @@ public class AVLTree {
         return AVLTreeLeftRotation(root);
     }
 
+    void search(int element){
+        root = search(root,element);
+    }
+
+    AVLTreeNode search(AVLTreeNode root, int element){
+        if (root == null){
+            return root;
+        }
+
+        if (root.element == element){
+            System.out.println(root.element);
+            return root;
+        }
+
+        if (element < root.element){
+            return search(root.left, element);
+        } else return search(root.right, element);
+
+    }
+
     void inorder() {
         inorder_Recursive(root);
     }
