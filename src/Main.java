@@ -6,15 +6,30 @@ public class Main {
         AVLTree.insert(7);
         AVLTree.insert(12);
 
-        for (int i = 0; i < 10000000; i++){
-            AVLTree.insert((int)Math.floor(Math.random() * (10000000 - 2 + 1) + 2));
-        }
+//        for (int i = 0; i < 100000; i++){
+//            AVLTree.insert((int)Math.floor(Math.random() * (100000 - 2 + 1) + 2));
+//        }
+//
+//        AVLTree.inorder();
+//        System.out.println("\n");
+//
+//        for (int i = 0; i < 100000; i++){
+//            AVLTree.delete((int)Math.floor(Math.random() * (100000 - 2 + 1) + 2));
+//        }        //AVLTree.inorder();
+//        AVLTree.search(9);
+        RedBlackTree RedBlackTree = new RedBlackTree();
+        RedBlackTree.insert(5);
+        RedBlackTree.insert(45);
+        RedBlackTree.insert(10);
+        RedBlackTree.insert(7);
+        RedBlackTree.insert(12);
 
-        //AVLTree.inorder();
-        System.out.println("\n");
-        AVLTree.delete(899);
-        //AVLTree.inorder();
-        AVLTree.search(9);
+        RedBlackTree.inorder();
+
+
 
     }
+
+
+
 }

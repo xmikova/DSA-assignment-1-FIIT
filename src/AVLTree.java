@@ -8,8 +8,8 @@ public class AVLTree {
 
         public AVLTreeNode(int element)
         {
-            left = null;
-            right = null;
+            this.left = null;
+            this.right = null;
             this.height = 1;
             this.element = element;
         }
