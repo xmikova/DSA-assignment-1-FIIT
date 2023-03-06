@@ -21,20 +21,30 @@ public class Main {
 //        }        //AVLTree.inorder();
 //        AVLTree.search(9);
         RedBlackTree RedBlackTree = new RedBlackTree();
+//        RedBlackTree.insert(5);
+//        RedBlackTree.insert(45);
+//        RedBlackTree.insert(10);
+//        RedBlackTree.insert(7);
+//        RedBlackTree.insert(12);
+//        RedBlackTree.insert(6);
+//        RedBlackTree.insert(95);
+//        RedBlackTree.insert(19);
+//        RedBlackTree.insert(37);
+
+        RedBlackTree.insert(1);
+        RedBlackTree.insert(2);
+        RedBlackTree.insert(3);
+        RedBlackTree.insert(4);
         RedBlackTree.insert(5);
-        RedBlackTree.insert(45);
-        RedBlackTree.insert(10);
-        RedBlackTree.insert(7);
-        RedBlackTree.insert(12);
         RedBlackTree.insert(6);
-        RedBlackTree.insert(95);
-        RedBlackTree.insert(19);
-        RedBlackTree.insert(37);
+
+
+
 
         //RedBlackTree.inorder();
 //        long startTime = System.currentTimeMillis();
 //
-//
+       RedBlackTree.printPreorder();
 //        for (int i = 0; i < 10000000; i++){
 //            RedBlackTree.insert((int)Math.floor(Math.random() * (10000000 - 2 + 1) + 2));
 //        }
@@ -43,7 +53,7 @@ public class Main {
 //        long duration = (endTime - startTime);
 //        System.out.format("Milli = %s, ( S_Start : %s, S_End : %s ) \n", duration, startTime, endTime );
 
-       RedBlackTree.printPostorder();
+       //RedBlackTree.printPostorder();
 
     }
 

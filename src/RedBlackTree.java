@@ -20,162 +20,150 @@ public class RedBlackTree {
         root = null;
     }
 
+    public void insert(int element) {
+        // Step 1: Create a new red node.
+        RedBlackTreeNode newRedBlackTreeNode = new RedBlackTreeNode(element);
 
-
-    void insert(int element)  {
-        root = insert(root, element);
-    }
-
-
-    RedBlackTree.RedBlackTreeNode insert(RedBlackTree.RedBlackTreeNode root, int element) {
-        //tree is empty
-        if (root == null) {
-            root = new RedBlackTreeNode(element); //create new tree if empty
-            root.Red = false;
-            return root;
-        }
-
-        //traverse the tree recursively
-        if (element < root.element) {   //insert in the left subtree
-            root.left = insert(root.left, element);
-            root.left.parent = root; // set the parent of the newly created node
-        } else if (element > root.element) {  //insert in the right subtree
-            root.right = insert(root.right, element);
-            root.right.parent = root; // set the parent of the newly created node
-        }
-
-        // Balance the current node
-        root = BalanceRedBlackTree(root);
-
-        // Make sure the root node is black
-        if (root.parent == null) {
-            root.Red = false;
-        }
-
-        return root;
-    }
-
-    private RedBlackTreeNode BalanceRedBlackTree(RedBlackTreeNode root) {
-        while (root.parent != null && root.parent.Red == true) {
-            if (root.parent == root.parent.parent.left) {
-                RedBlackTreeNode uncle = root.parent.parent.right;
-                if (uncle != null && uncle.Red == true) {
-                    root.parent.Red = false;
-                    uncle.Red = false;
-                    root.parent.parent.Red = true;
-                    root = root.parent.parent;
-                } else {
-                    if (root == root.parent.right) {
-                        root = root.parent;
-                        root = RedBlackTreeLeftRotation(root);
-                    }
-                    root.parent.Red = false;
-                    root.parent.parent.Red = true;
-                    root = RedBlackTreeRightRotation(root.parent.parent);
-                }
+        // Step 2: Insert the node using BST insertion algorithm., ITErative
+        RedBlackTreeNode parent = null;
+        RedBlackTreeNode current = root;
+        while (current != null) {
+            parent = current;
+            if (element < current.element) {
+                current = current.left;
             } else {
-                RedBlackTreeNode uncle = root.parent.parent.left;
-                if (uncle != null && uncle.Red == true) {
-                    root.parent.Red = false;
-                    uncle.Red = false;
-                    root.parent.parent.Red = true;
-                    root = root.parent.parent;
-                } else {
-                    if (root == root.parent.left) {
-                        root = root.parent;
-                        root = RedBlackTreeRightRotation(root);
-                    }
-                    root.parent.Red = false;
-                    root.parent.parent.Red = true;
-                    root = RedBlackTreeLeftRotation(root.parent.parent);
-                }
-            }
-            System.out.println("Root: " + root.element + ", Parent: " + root.parent.element + ", Grandparent: " + root.parent.parent.element); // Debugging line
-        }
-        root.Red = false;
-        return root;
-    }
-
-    private RedBlackTreeNode RedBlackTreeLeftRotation(RedBlackTreeNode root) {
-        RedBlackTreeNode x = root.right;
-        root.right = x.left;
-        if (root.right != null) {
-            root.right.parent = root;
-        }
-        x.left = root;
-        x.Red = root.Red;
-        root.Red = true;
-        x.parent = root.parent;
-        root.parent = x;
-        if (x.parent != null) {
-            if (x.parent.left == root) {
-                x.parent.left = x;
-            } else {
-                x.parent.right = x;
+                current = current.right;
             }
         }
-        return x;
-    }
 
-    private RedBlackTreeNode RedBlackTreeRightRotation(RedBlackTreeNode root) {
-        System.out.println("Before right rotation: " + root.element);
-        RedBlackTreeNode x = root.left;
-        root.left = x.right;
-        if (x.right != null) {
-            x.right.parent = root;
-        }
-        x.parent = root.parent;
-        if (root.parent == null) {
-            this.root = x;
-        } else if (root == root.parent.right) {
-            root.parent.right = x;
+        // Set the parent of the new node.
+        newRedBlackTreeNode.parent = parent;
+
+        // Set the new node as the left or right child of its parent.
+        if (parent == null) {
+            // Tree is empty. Set new node as root.
+            root = newRedBlackTreeNode;
+        } else if (element < parent.element) {
+            parent.left = newRedBlackTreeNode;
         } else {
-            root.parent.left = x;
+            parent.right = newRedBlackTreeNode;
         }
-        x.right = root;
-        root.parent = x;
-        x.Red = root.Red;
-        root.Red = true;
-        System.out.println("After right rotation: " + x.element);
-        return x;
+
+        // Step 3: Fix the Red-Black Tree properties that may have been violated by the insertion.
+        BalanceRedBlackTree(newRedBlackTreeNode);
     }
 
-    void inorder() {
-        inorder_Recursive(root);
-    }
-
-    // recursively traverse the BST
-    void inorder_Recursive(RedBlackTreeNode root) {
-        if (root != null) {
-            inorder_Recursive(root.left);
-            System.out.print(root.element + " ");
-            inorder_Recursive(root.right);
-        }
-    }
-    void printPostorder() { printPostorder(root); }
-
-    void printPostorder(RedBlackTreeNode root) {
-        if (root == null)
+    private void BalanceRedBlackTree(RedBlackTreeNode node) {
+        // Case 1: The node is the root. Color it black and we're done.
+        if (node == root) {
+            node.Red = false;
             return;
+        }
 
-        // first recur on left subtree
-        printPostorder(root.left);
+        // Case 2: The parent of the node is black. No violations, so we're done.
+        if (node.parent.Red == false) {
+            return;
+        }
 
-        // then recur on right subtree
-        printPostorder(root.right);
+        // Case 3: The parent and the uncle of the node are both red. Recolor them and move up the tree.
+        RedBlackTreeNode parent = node.parent;
+        RedBlackTreeNode uncle = getUncle(node);
 
-        // now deal with the node
-        System.out.print(root.element + " ");
+        if (uncle != null && uncle.Red) {
+            parent.Red = false;
+            uncle.Red = false;
+            parent.parent.Red = true; //grandparent
+            BalanceRedBlackTree(parent.parent);
+            return;
+        }
+
+        // Case 4: The node is a right child and its parent is a left child. Rotate left.
+        if (node == parent.right && parent == parent.parent.left) {
+            rotateLeft(parent);
+            node = node.left;
+        } else if (node == parent.left && parent == parent.parent.right) {
+            // Case 5: The node is a left child and its parent is a right child. Rotate right.
+            rotateRight(parent);
+            node = node.right;
+        }
+
+        // Case 6: The node's parent is red, but the uncle is black. Recolor and rotate.
+        parent = node.parent;
+        parent.parent = parent.parent;
+
+        parent.Red = false;
+        parent.parent.Red = true;
+
+        if (node == parent.left && parent == parent.parent.left) {
+            rotateRight(parent.parent);
+        } else {
+            rotateLeft(parent.parent);
+        }
     }
 
-    // Wrappers over above recursive functions
+    private RedBlackTreeNode getUncle(RedBlackTreeNode node) { //uncle getter
+        //RedBlackTreeNode grandparent = node.parent.parent;
+        if (node.parent.parent == null) {
+            return null; // No grandparent, so no uncle.
+        }
+        if (node.parent == node.parent.parent.left) {
+            return node.parent.parent.right;
+        } else {
+            return node.parent.parent.left;
+        }
+    }
+
+    private void rotateLeft(RedBlackTreeNode node) {
+        RedBlackTreeNode xl = node.right;
+        node.right = xl.left;
+        if (xl.left != null) {
+            xl.left.parent = node;
+        }
+        xl.parent = node.parent;
+        if (node.parent == null) {
+            root = xl;
+        } else if (node == node.parent.left) {
+            node.parent.left = xl;
+        } else {
+            node.parent.right = xl;
+        }
+        xl.left = node;
+        node.parent = xl;
+    }
+
+    private void rotateRight(RedBlackTreeNode node) {
+        RedBlackTreeNode xr = node.left;
+        node.left = xr.right;
+        if (xr.right != null) {
+            xr.right.parent = node;
+        }
+        xr.parent = node.parent;
+        if (node.parent == null) {
+            root = xr;
+        } else if (node == node.parent.right) {
+            node.parent.right = xr;
+        } else {
+            node.parent.left = xr;
+        }
+        xr.right = node;
+        node.parent = xr;
+    }
 
 
 
 
+    void printPreorder(RedBlackTreeNode node) {
+        if (node != null) {
+            System.out.print(node.element + " ");
+            printPreorder(node.left);
+            printPreorder(node.right);
+        }
+    }
 
-
-
+    // Wrapper method for starting the pre-order traversal from the root node
+    void printPreorder() {
+        printPreorder(root);
+    }
 
 
 }
