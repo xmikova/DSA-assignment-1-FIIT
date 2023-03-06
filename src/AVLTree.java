@@ -21,71 +21,92 @@ public class AVLTree {
         root = null;
     }
 
-    public int height(AVLTreeNode root) {
-        if (root == null) {
-            return -1;  // null node has height -1
-        } else {
-            return root.height;
-        }
-    }
 
-    void insert(int element)  {
+    public void insert(int element) {
         root = insert(root, element);
     }
 
-    //recursive insert function
-    AVLTreeNode insert(AVLTreeNode root, int element) {
-        //tree is empty
-        if (root == null) {
-            root = new AVLTreeNode(element); //create new tree if empty
-            return root;
-        }else
-        //traverse the tree recursively
-        if (element < root.element)     //insert in the left subtree
-            root.left = insert(root.left, element);
-        else if (element > root.element)    //insert in the right subtree
-            root.right = insert(root.right, element);
-        // return pointer
-
-        root.height = 1 + Math.max(height(root.left), height(root.right));
-
-        // Balance the current node
-        root = BalanceAVLTree(root);
-
-        return root;
-
-    }
-
-    void delete(int element){
-        root = delete(root, element);
-    }
-
-    AVLTreeNode delete(AVLTreeNode root, int element){
-        if (root == null){
-            return root; //empty tree
+    private AVLTreeNode insert(AVLTreeNode node, int element) {
+        // Perform normal BST insertion
+        if (node == null) {
+            return new AVLTreeNode(element);
+        }
+        if (element < node.element) {
+            node.left = insert(node.left, element);
+        } else if (element > node.element) {
+            node.right = insert(node.right, element);
+        } else { // Duplicate keys not allowed
+            return node;
         }
 
-        if (element < root.element){  //traversing the tree recursively
-            root.left = delete(root.left, element);
-        }else if (element > root.element){
-            root.right = delete(root.right, element);
+        // Update height of this ancestor node
+        node.height = 1 + Math.max(height(node.left), height(node.right));
+
+        // Get the balance factor of this ancestor node to check whether
+        // this node became unbalanced
+        int balance = getBalance(node);
+
+        // If this node becomes unbalanced, then there are 4 cases
+        // Left Left Case
+        if (balance > 1 && element < node.left.element) {
+            return rotateRight(node);
         }
-
-        else { //case where node has one or no child
-            if (root.left == null){
-                return root.right;
-            } else if (root.right == null){
-                return root.left;
-            }
-
-            //case where node has two children, find the smallest successor in the right subtree
-
-            root.element = MinimalValue(root.right);
-            root.right = delete(root.right, root.element);
+        // Right Right Case
+        if (balance < -1 && element > node.right.element) {
+            return rotateLeft(node);
         }
-
-        return root;
+        // Left Right Case
+        if (balance > 1 && element > node.left.element) {
+            node.left = rotateLeft(node.left);
+            return rotateRight(node);
+        }
+        // Right Left Case
+        if (balance < -1 && element < node.right.element) {
+            node.right = rotateRight(node.right);
+            return rotateLeft(node);
+        }
+        // return the (unchanged) node pointer
+        return node;
     }
+
+    private int height(AVLTreeNode node) {
+        if (node == null) {
+            return 0;
+        } else {
+            return node.height;
+        }
+    }
+
+    private int getBalance(AVLTreeNode node) {
+        if (node == null) {
+            return 0;
+        } else {
+            return height(node.left) - height(node.right);
+        }
+    }
+
+    private AVLTreeNode rotateRight(AVLTreeNode node) {
+        AVLTreeNode leftChild = node.left;
+        AVLTreeNode rightGrandChild = leftChild.right;
+        leftChild.right = node;
+        node.left = rightGrandChild;
+        // Update heights
+        node.height = 1 + Math.max(height(node.left), height(node.right));
+        leftChild.height = 1 + Math.max(height(leftChild.left), height(leftChild.right));
+        return leftChild;
+    }
+
+    private AVLTreeNode rotateLeft(AVLTreeNode node) {
+        AVLTreeNode rightChild = node.right;
+        AVLTreeNode leftGrandChild = rightChild.left;
+        rightChild.left = node;
+        node.right = leftGrandChild;
+        // Update heights
+        node.height = 1 + Math.max(height(node.left), height(node.right));
+        rightChild.height = 1 + Math.max(height(rightChild.left), height(rightChild.right));
+        return rightChild;
+    }
+
 
     int MinimalValue(AVLTreeNode root){
         int MinVal = root.element;
@@ -96,52 +117,6 @@ public class AVLTree {
         return MinVal;
     }
 
-    public AVLTreeNode BalanceAVLTree(AVLTreeNode root) {
-
-        if ((height(root.left) - height(root.right) > 1) && (height(root.left.left) > height(root.left.right))) {
-            root = AVLTreeRightRotation(root);
-        } else if ((height(root.left) - height(root.right) > 1) &&(height(root.left.left) < height(root.left.right))) {
-            root = AVLTreeLeftRightRotation(root);
-        } else if ((height(root.left) - height(root.right) < -1) && (height(root.right.left) < height(root.right.right))){
-            root = AVLTreeLeftRotation(root);
-        } else if ((height(root.left) - height(root.right) < -1) &&  (height(root.right.left) > height(root.right.right))) {
-            root = AVLTreeRightLeftRotation(root);
-        }
-
-        return root;
-    }
-
-    public AVLTreeNode AVLTreeRightRotation(AVLTreeNode root){
-        AVLTreeNode temp = root.left;
-        root.left = temp.right;
-        temp.right = root;
-
-        root.height = 1 + Math.max(height(root.left), height(root.right));
-        temp.height = 1 + Math.max(height(temp.left), height(temp.right));
-
-        return temp;
-    }
-
-    public AVLTreeNode AVLTreeLeftRotation(AVLTreeNode root){
-        AVLTreeNode temp = root.right;
-        root.right = temp.left;
-        temp.left = root;
-
-        root.height = 1 + Math.max(height(root.left), height(root.right));
-        temp.height = 1 + Math.max(height(temp.left), height(temp.right));
-
-        return temp;
-    }
-
-    public AVLTreeNode AVLTreeLeftRightRotation(AVLTreeNode root) {
-        root.left = AVLTreeLeftRotation(root.left);
-        return AVLTreeRightRotation(root);
-    }
-
-    public AVLTreeNode AVLTreeRightLeftRotation(AVLTreeNode root) {
-        root.right = AVLTreeRightRotation(root.right);
-        return AVLTreeLeftRotation(root);
-    }
 
     void search(int element){
         root = search(root,element);
@@ -175,5 +150,20 @@ public class AVLTree {
             inorder_Recursive(root.right);
         }
     }
+
+    void printPreorder() {
+        printPreorder(root);
+        System.out.println();
+    }
+
+    void printPreorder(AVLTreeNode node) {
+        if (node == null) {
+            return;
+        }
+        System.out.print(node.element + " ");
+        printPreorder(node.left);
+        printPreorder(node.right);
+    }
 }
+
 

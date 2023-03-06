@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="75cecb0a-929e-4b2e-8a73-8dcd4d077c2f" name="Changes" comment="non functional version">
+    <list default="true" id="75cecb0a-929e-4b2e-8a73-8dcd4d077c2f" name="Changes" comment="think it works RB tree insert implementation">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/AVLTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/AVLTree.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RedBlackTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RedBlackTree.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -141,7 +141,14 @@
       <option name="project" value="LOCAL" />
       <updated>1678129410854</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="think it works RB tree insert implementation">
+      <created>1678138094727</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1678138094727</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -161,7 +168,8 @@
     <MESSAGE value="AVL recursive search first implementation" />
     <MESSAGE value="very first implementation of RedBlackTree insert" />
     <MESSAGE value="non functional version" />
-    <option name="LAST_COMMIT_MESSAGE" value="non functional version" />
+    <MESSAGE value="think it works RB tree insert implementation" />
+    <option name="LAST_COMMIT_MESSAGE" value="think it works RB tree insert implementation" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

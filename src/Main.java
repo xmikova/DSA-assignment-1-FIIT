@@ -4,10 +4,18 @@ import java.time.Instant;
 public class Main {
     public static void main(String[] args) {
         AVLTree AVLTree = new AVLTree();
+        AVLTree.insert(5);
         AVLTree.insert(45);
         AVLTree.insert(10);
         AVLTree.insert(7);
         AVLTree.insert(12);
+        AVLTree.insert(6);
+        AVLTree.insert(95);
+        AVLTree.insert(19);
+        AVLTree.insert(37);
+
+        AVLTree.printPreorder();
+        System.out.println("");
 
 //        for (int i = 0; i < 100000; i++){
 //            AVLTree.insert((int)Math.floor(Math.random() * (100000 - 2 + 1) + 2));
@@ -21,22 +29,22 @@ public class Main {
 //        }        //AVLTree.inorder();
 //        AVLTree.search(9);
         RedBlackTree RedBlackTree = new RedBlackTree();
-//        RedBlackTree.insert(5);
-//        RedBlackTree.insert(45);
-//        RedBlackTree.insert(10);
-//        RedBlackTree.insert(7);
-//        RedBlackTree.insert(12);
-//        RedBlackTree.insert(6);
-//        RedBlackTree.insert(95);
-//        RedBlackTree.insert(19);
-//        RedBlackTree.insert(37);
-
-        RedBlackTree.insert(1);
-        RedBlackTree.insert(2);
-        RedBlackTree.insert(3);
-        RedBlackTree.insert(4);
         RedBlackTree.insert(5);
+        RedBlackTree.insert(45);
+        RedBlackTree.insert(10);
+        RedBlackTree.insert(7);
+        RedBlackTree.insert(12);
         RedBlackTree.insert(6);
+        RedBlackTree.insert(95);
+        RedBlackTree.insert(19);
+        RedBlackTree.insert(37);
+
+//        RedBlackTree.insert(1);
+//        RedBlackTree.insert(2);
+//        RedBlackTree.insert(3);
+//        RedBlackTree.insert(4);
+//        RedBlackTree.insert(5);
+//        RedBlackTree.insert(6);
 
 
 
