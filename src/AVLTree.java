@@ -6,7 +6,7 @@ public class AVLTree {
         AVLTreeNode left;
         AVLTreeNode right;
 
-        public AVLTreeNode(int element)
+        public AVLTreeNode(int element) //node constructor
         {
             this.left = null;
             this.right = null;
@@ -46,30 +46,34 @@ public class AVLTree {
         // this node became unbalanced
         int balance = getBalance(node);
 
-        // If this node becomes unbalanced, then there are 4 cases
-        // Left Left Case
+        return BalanceAVLTree(node, balance, element); //balance the tree
+    }
+
+    AVLTreeNode BalanceAVLTree(AVLTreeNode node, int balance, int element){
+        // If this node becomes unbalanced, then there are 4 cases!
+        // Left Left Imbalance
         if (balance > 1 && element < node.left.element) {
-            return rotateRight(node);
+            return AVLTreeRightRotation(node);
         }
-        // Right Right Case
+        // Right Right Imbalance
         if (balance < -1 && element > node.right.element) {
-            return rotateLeft(node);
+            return AVLTreeLeftRotation(node);
         }
         // Left Right Case
         if (balance > 1 && element > node.left.element) {
-            node.left = rotateLeft(node.left);
-            return rotateRight(node);
+            node.left = AVLTreeLeftRotation(node.left);
+            return AVLTreeRightRotation(node);
         }
         // Right Left Case
         if (balance < -1 && element < node.right.element) {
-            node.right = rotateRight(node.right);
-            return rotateLeft(node);
+            node.right = AVLTreeRightRotation(node.right);
+            return AVLTreeLeftRotation(node);
         }
-        // return the (unchanged) node pointer
+        // return the (unchanged) node pointer (no balancing was needed)
         return node;
     }
 
-    private int height(AVLTreeNode node) {
+    private int height(AVLTreeNode node) { //helper function for node height so that we dont get nullptrexception when node is null
         if (node == null) {
             return 0;
         } else {
@@ -77,7 +81,7 @@ public class AVLTree {
         }
     }
 
-    private int getBalance(AVLTreeNode node) {
+    private int getBalance(AVLTreeNode node) { //helper function to find out whether there is an imbalance in the tree after inserting node
         if (node == null) {
             return 0;
         } else {
@@ -85,22 +89,22 @@ public class AVLTree {
         }
     }
 
-    private AVLTreeNode rotateRight(AVLTreeNode node) {
+    private AVLTreeNode AVLTreeRightRotation(AVLTreeNode node) {
         AVLTreeNode leftChild = node.left;
-        AVLTreeNode rightGrandChild = leftChild.right;
+        AVLTreeNode rightGrandchild = leftChild.right;
         leftChild.right = node;
-        node.left = rightGrandChild;
+        node.left = rightGrandchild;
         // Update heights
         node.height = 1 + Math.max(height(node.left), height(node.right));
         leftChild.height = 1 + Math.max(height(leftChild.left), height(leftChild.right));
         return leftChild;
     }
 
-    private AVLTreeNode rotateLeft(AVLTreeNode node) {
+    private AVLTreeNode AVLTreeLeftRotation(AVLTreeNode node) {
         AVLTreeNode rightChild = node.right;
-        AVLTreeNode leftGrandChild = rightChild.left;
+        AVLTreeNode leftGrandchild = rightChild.left;
         rightChild.left = node;
-        node.right = leftGrandChild;
+        node.right = leftGrandchild;
         // Update heights
         node.height = 1 + Math.max(height(node.left), height(node.right));
         rightChild.height = 1 + Math.max(height(rightChild.left), height(rightChild.right));
@@ -137,6 +141,8 @@ public class AVLTree {
         } else return search(root.right, element);
 
     }
+//---------------------------------------------------------------------------------------------------------------------//
+    //just traversals there//
 
     void inorder() {
         inorder_Recursive(root);
