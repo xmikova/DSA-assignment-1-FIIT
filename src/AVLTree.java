@@ -49,6 +49,51 @@ public class AVLTree {
         return BalanceAVLTree(node, balance, element); //balance the tree
     }
 
+    public void delete(int element) {
+        root = delete(root, element);
+    }
+
+    private AVLTreeNode delete(AVLTreeNode node, int element) {
+        if (node == null)
+            return node;
+
+        if (element < node.element)
+            node.left = delete(node.left, element);
+        else if (element > node.element)
+            node.right = delete(node.right, element);
+        else {
+            if (node.left == null || node.right == null) {
+                AVLTreeNode temp = null;
+                if (node.left == null)
+                    temp = node.right;
+                else
+                    temp = node.left;
+
+                if (temp == null) {
+                    temp = node;
+                    node = null;
+                } else {
+                    node = temp;
+                }
+            } else {
+                AVLTreeNode temp = MinimalValue(node.right);
+                node.element = temp.element;
+                node.right = delete(node.right, temp.element);
+            }
+        }
+
+        if (node == null)
+            return node;
+
+        node.height = Math.max(height(node.left), height(node.right)) + 1;
+
+        int balance = getBalance(node);
+
+        return BalanceAVLTree(node, balance, element);
+    }
+
+
+
     AVLTreeNode BalanceAVLTree(AVLTreeNode node, int balance, int element){
         // If this node becomes unbalanced, then there are 4 cases!
         // Left Left Imbalance
@@ -112,15 +157,15 @@ public class AVLTree {
     }
 
 
-    int MinimalValue(AVLTreeNode root){
-        int MinVal = root.element;
-        while (root.left != null){
-            MinVal = root.left.element;
-            root = root.left;
-        }
-        return MinVal;
-    }
+    AVLTreeNode MinimalValue(AVLTreeNode node) {
+        AVLTreeNode current = node;
 
+        /* loop down to find the leftmost leaf */
+        while (current.left != null)
+            current = current.left;
+
+        return current;
+    }
 
     void search(int element){
         root = search(root,element);
@@ -141,6 +186,8 @@ public class AVLTree {
         } else return search(root.right, element);
 
     }
+
+
 //---------------------------------------------------------------------------------------------------------------------//
     //just traversals there//
 

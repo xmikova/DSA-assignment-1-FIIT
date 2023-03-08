@@ -2,12 +2,12 @@ public class RedBlackTree {
 
     static class RedBlackTreeNode{
         int element;
-        boolean Red; // 1 = red, 0 = black
+        boolean Red;
         RedBlackTreeNode left;
         RedBlackTreeNode right;
         RedBlackTreeNode parent;
 
-        public RedBlackTreeNode(int element){
+        public RedBlackTreeNode(int element){ // every new node is colored red
             this.element = element;
             this.Red = true;
             this.left = this.right = this.parent = null;
@@ -20,11 +20,13 @@ public class RedBlackTree {
         root = null;
     }
 
+
     public void insert(int element) {
+
         // Step 1: Create a new red node.
         RedBlackTreeNode newRedBlackTreeNode = new RedBlackTreeNode(element);
 
-        // Step 2: Insert the node using BST insertion algorithm., ITErative
+        // Step 2: Insert the node using the classic BST insertion algorithm
         RedBlackTreeNode parent = null;
         RedBlackTreeNode current = root;
         while (current != null) {
@@ -53,7 +55,7 @@ public class RedBlackTree {
         BalanceRedBlackTree(newRedBlackTreeNode);
     }
 
-    private void BalanceRedBlackTree(RedBlackTreeNode node) {
+    private void BalanceRedBlackTree(RedBlackTreeNode node) { //TODO: comment and understand the code there
         // Case 1: The node is the root. Color it black and we're done.
         if (node == root) {
             node.Red = false;
@@ -149,7 +151,7 @@ public class RedBlackTree {
         node.parent = xr;
     }
 
-
+//---------------------------just traversals down there--------------------------------------------------------------//
 
 
     void printPreorder(RedBlackTreeNode node) {

@@ -4,16 +4,26 @@ import java.time.Instant;
 public class Main {
     public static void main(String[] args) {
         AVLTree AVLTree = new AVLTree();
-        AVLTree.insert(5);
-        AVLTree.insert(45);
-        AVLTree.insert(10);
-        AVLTree.insert(7);
-        AVLTree.insert(12);
-        AVLTree.insert(6);
-        AVLTree.insert(95);
-        AVLTree.insert(19);
-        AVLTree.insert(37);
+//        AVLTree.insert(5);
+//        AVLTree.insert(45);
+//        AVLTree.insert(10);
+//        AVLTree.insert(7);
+//        AVLTree.insert(12);
+//        AVLTree.insert(6);
+//        AVLTree.insert(95);
+//        AVLTree.insert(19);
+//        AVLTree.insert(37);
 
+        AVLTree.insert(1);
+        AVLTree.insert(2);
+        AVLTree.insert(3);
+        AVLTree.insert(4);
+        AVLTree.insert(5);
+
+        AVLTree.printPreorder();
+        System.out.println("");
+
+        AVLTree.delete(4);
         AVLTree.printPreorder();
         System.out.println("");
 
