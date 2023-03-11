@@ -17,104 +17,113 @@ public class AVLTree {
 
     AVLTreeNode root;
 
-    AVLTree(){
+    AVLTree(){ //avl tree constructor
         root = null;
     }
-
 
     public void insert(int element) {
         root = insert(root, element);
     }
 
-    private AVLTreeNode insert(AVLTreeNode node, int element) {
-        // Perform normal BST insertion
-        if (node == null) {
+    private AVLTreeNode insert(AVLTreeNode root, int element) {
+        if (root == null) {
             return new AVLTreeNode(element);
         }
-        if (element < node.element) {
-            node.left = insert(node.left, element);
-        } else if (element > node.element) {
-            node.right = insert(node.right, element);
+        if (element < root.element) {
+            root.left = insert(root.left, element);
+        } else if (element > root.element) {
+            root.right = insert(root.right, element);
         } else { // Duplicate keys not allowed
-            return node;
+            return root;
         }
 
         // Update height of this ancestor node
-        node.height = 1 + Math.max(height(node.left), height(node.right));
-
+        root.height = 1 + Math.max(height(root.left), height(root.right));
         // Get the balance factor of this ancestor node to check whether
         // this node became unbalanced
-        int balance = getBalance(node);
+        int balance = getBalance(root);
 
-        return BalanceAVLTree(node, balance, element); //balance the tree
+        return BalanceAVLTree(root, balance); //balance the tree
     }
 
     public void delete(int element) {
         root = delete(root, element);
     }
 
-    private AVLTreeNode delete(AVLTreeNode node, int element) {
-        if (node == null)
-            return node;
+    private AVLTreeNode delete(AVLTreeNode root, int element) {
+        if (root == null) {
+            return root;
+        }
 
-        if (element < node.element)
-            node.left = delete(node.left, element);
-        else if (element > node.element)
-            node.right = delete(node.right, element);
-        else {
-            if (node.left == null || node.right == null) {
+        if (element < root.element) {
+            root.left = delete(root.left, element);
+        } else if (element > root.element) {
+            root.right = delete(root.right, element);
+        } else {
+            // node with only one child or no child
+            if ((root.left == null) || (root.right == null)) {
                 AVLTreeNode temp = null;
-                if (node.left == null)
-                    temp = node.right;
-                else
-                    temp = node.left;
-
-                if (temp == null) {
-                    temp = node;
-                    node = null;
+                if (temp == root.left) {
+                    temp = root.right;
                 } else {
-                    node = temp;
+                    temp = root.left;
+                }
+
+                // no child case
+                if (temp == null) {
+                    temp = root;
+                    root = null;
+                } else { // one child case
+                    root = temp; // Copy the contents of the non-empty child
                 }
             } else {
-                AVLTreeNode temp = MinimalValue(node.right);
-                node.element = temp.element;
-                node.right = delete(node.right, temp.element);
+                // node with two children: Get the inorder successor (smallest
+                // in the right subtree)
+                AVLTreeNode temp = Min(root.right);
+
+                // Copy the inorder successor's data to this node
+                root.element = temp.element;
+
+                // Delete the inorder successor
+                root.right = delete(root.right, temp.element);
             }
         }
 
-        if (node == null)
-            return node;
+        // If the tree had only one node then return
+        if (root == null) {
+            return root;
+        }
 
-        node.height = Math.max(height(node.left), height(node.right)) + 1;
+        // Update height of the current node
+        root.height = 1 + Math.max(height(root.left), height(root.right));
 
-        int balance = getBalance(node);
-
-        return BalanceAVLTree(node, balance, element);
+        // Get the balance factor of this node to check whether this node became unbalanced
+        int balance = getBalance(root);
+        // Balance the tree if necessary
+        return BalanceAVLTree(root, balance);
     }
 
 
 
-    AVLTreeNode BalanceAVLTree(AVLTreeNode node, int balance, int element){
-        // If this node becomes unbalanced, then there are 4 cases!
-        // Left Left Imbalance
-        if (balance > 1 && element < node.left.element) {
-            return AVLTreeRightRotation(node);
+    private AVLTreeNode BalanceAVLTree(AVLTreeNode node, int balance) {
+        // left left case
+        if (balance > 1 && height(node.left.left) >= height(node.left.right)) {
+            node = AVLTreeRightRotation(node);
         }
-        // Right Right Imbalance
-        if (balance < -1 && element > node.right.element) {
-            return AVLTreeLeftRotation(node);
+        // right right case
+        else if (balance < -1 && height(node.right.right) >= height(node.right.left)) {
+            node = AVLTreeLeftRotation(node);
         }
-        // Left Right Case
-        if (balance > 1 && element > node.left.element) {
+        // left right case
+        else if (balance > 1 && height(node.left.left) < height(node.left.right)) {
             node.left = AVLTreeLeftRotation(node.left);
-            return AVLTreeRightRotation(node);
+            node = AVLTreeRightRotation(node);
         }
-        // Right Left Case
-        if (balance < -1 && element < node.right.element) {
+        // right left case
+        else if (balance < -1 && height(node.right.right) < height(node.right.left)) {
             node.right = AVLTreeRightRotation(node.right);
-            return AVLTreeLeftRotation(node);
+            node = AVLTreeLeftRotation(node);
         }
-        // return the (unchanged) node pointer (no balancing was needed)
         return node;
     }
 
@@ -127,11 +136,7 @@ public class AVLTree {
     }
 
     private int getBalance(AVLTreeNode node) { //helper function to find out whether there is an imbalance in the tree after inserting node
-        if (node == null) {
-            return 0;
-        } else {
-            return height(node.left) - height(node.right);
-        }
+        return (node == null) ? 0 : height(node.left) - height(node.right);
     }
 
     private AVLTreeNode AVLTreeRightRotation(AVLTreeNode node) {
@@ -157,7 +162,7 @@ public class AVLTree {
     }
 
 
-    AVLTreeNode MinimalValue(AVLTreeNode node) {
+    AVLTreeNode Min(AVLTreeNode node) {
         AVLTreeNode current = node;
 
         /* loop down to find the leftmost leaf */
