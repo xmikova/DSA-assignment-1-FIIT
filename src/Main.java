@@ -79,6 +79,21 @@ public class Main {
         Instant end3 = Instant.now();
         Duration timeElapsed3 = Duration.between(start3, end3);
         System.out.println("Time elapsed for 10M insert: " + timeElapsed3.toMillis() + " milliseconds\n");
+
+        Instant start4 = Instant.now();
+
+        for (int j = 0; j < 10000000; j++){
+
+            //AVLTree.insert(ThreadLocalRandom.current().nextInt(0, 1000000 + 1));
+            //AVLTree.insert(random.nextInt(1000000) + 1);
+            RedBlackTree.delete(numbers[j]);
+
+        }
+
+
+        Instant end4 = Instant.now();
+        Duration timeElapsed4 = Duration.between(start4, end4);
+        System.out.println("Time elapsed for 10M delete: " + timeElapsed4.toMillis() + " milliseconds");
 //
 //        AVLTree.inorder();
 //        System.out.println("\n");

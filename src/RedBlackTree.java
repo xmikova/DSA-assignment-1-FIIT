@@ -21,7 +21,7 @@ public class RedBlackTree {
     }
 
 
-    public void insert(int element) {
+    public void insert(int element) { //
 
         // Step 1: Create a new red node.
         RedBlackTreeNode newRedBlackTreeNode = new RedBlackTreeNode(element);
@@ -115,41 +115,185 @@ public class RedBlackTree {
         }
     }
 
-    private void rotateLeft(RedBlackTreeNode node) {
-        RedBlackTreeNode xl = node.right;
-        node.right = xl.left;
-        if (xl.left != null) {
-            xl.left.parent = node;
+    private void rotateLeft(RedBlackTreeNode x) {
+        RedBlackTreeNode y = x.right;
+        x.right = y.left;
+        if (y.left != null) {
+            y.left.parent = x;
         }
-        xl.parent = node.parent;
-        if (node.parent == null) {
-            root = xl;
-        } else if (node == node.parent.left) {
-            node.parent.left = xl;
+        y.parent = x.parent;
+        if (x.parent == null) {
+            root = y;
+        } else if (x == x.parent.left) {
+            x.parent.left = y;
         } else {
-            node.parent.right = xl;
+            x.parent.right = y;
         }
-        xl.left = node;
-        node.parent = xl;
+        y.left = x;
+        x.parent = y;
     }
 
-    private void rotateRight(RedBlackTreeNode node) {
-        RedBlackTreeNode xr = node.left;
-        node.left = xr.right;
-        if (xr.right != null) {
-            xr.right.parent = node;
+    private void rotateRight(RedBlackTreeNode y) {
+        RedBlackTreeNode x = y.left;
+        y.left = x.right;
+        if (x.right != null) {
+            x.right.parent = y;
         }
-        xr.parent = node.parent;
-        if (node.parent == null) {
-            root = xr;
-        } else if (node == node.parent.right) {
-            node.parent.right = xr;
+        x.parent = y.parent;
+        if (y.parent == null) {
+            root = x;
+        } else if (y == y.parent.left) {
+            y.parent.left = x;
         } else {
-            node.parent.left = xr;
+            y.parent.right = x;
         }
-        xr.right = node;
-        node.parent = xr;
+        x.right = y;
+        y.parent = x;
     }
+
+
+    public void delete(int element) {
+        RedBlackTreeNode nodeToDelete = root;
+        while (nodeToDelete != null) {
+            if (element == nodeToDelete.element) {
+                deleteNode(nodeToDelete);
+                return;
+            } else if (element < nodeToDelete.element) {
+                nodeToDelete = nodeToDelete.left;
+            } else {
+                nodeToDelete = nodeToDelete.right;
+            }
+        }
+    }
+
+    private void deleteNode(RedBlackTreeNode nodeToDelete) {
+        RedBlackTreeNode child, sibling;
+        boolean originalColor = nodeToDelete.Red;
+
+        if (nodeToDelete.left != null && nodeToDelete.right != null) {
+            // node has two children, find successor and replace nodeToDelete with it
+            RedBlackTreeNode successor = nodeToDelete.right;
+            while (successor.left != null) {
+                successor = successor.left;
+            }
+            originalColor = successor.Red;
+            nodeToDelete.element = successor.element;
+            nodeToDelete = successor;
+        }
+
+        // node has one child or no children
+        child = nodeToDelete.left != null ? nodeToDelete.left : nodeToDelete.right;
+
+        if (child != null) {
+            // update child's parent reference
+            child.parent = nodeToDelete.parent;
+        }
+
+        if (nodeToDelete.parent == null) {
+            // nodeToDelete is the root
+            root = child;
+        } else if (nodeToDelete == nodeToDelete.parent.left) {
+            nodeToDelete.parent.left = child;
+        } else {
+            nodeToDelete.parent.right = child;
+        }
+
+        // fixup the tree to maintain red-black properties
+        if (!originalColor) {
+            if (child != null && child.Red) {
+                child.Red = false;
+            } else {
+                deleteFixup(child, nodeToDelete.parent);
+            }
+        }
+    }
+
+
+    private void deleteFixup(RedBlackTreeNode x, RedBlackTreeNode parent) {
+        RedBlackTreeNode sibling;
+        while (x != root && (x == null || !x.Red)) {
+            if (x == parent.left) {
+                sibling = parent.right;
+                if (sibling.Red) {
+                    sibling.Red = false;
+                    parent.Red = true;
+                    rotateLeft(parent);
+                    sibling = parent.right;
+                }
+                if ((sibling.left == null || !sibling.left.Red) && (sibling.right == null || !sibling.right.Red)) {
+                    sibling.Red = true;
+                    x = parent;
+                    parent = x.parent;
+                } else {
+                    if (sibling.right == null || !sibling.right.Red) {
+                        if (sibling.left != null) {
+                            sibling.left.Red = false;
+                        }
+                        sibling.Red = true;
+                        rotateRight(sibling);
+                        sibling = parent.right;
+                    }
+                    sibling.Red = parent.Red;
+                    parent.Red = false;
+                    if (sibling.right != null) {
+                        sibling.right.Red = false;
+                    }
+                    rotateLeft(parent);
+                    x = root;
+                }
+            } else {
+                sibling = parent.left;
+                if (sibling.Red) {
+                    sibling.Red = false;
+                    parent.Red = true;
+                    rotateRight(parent);
+                    sibling = parent.left;
+                }
+                if ((sibling.left == null || !sibling.left.Red) && (sibling.right == null || !sibling.right.Red)) {
+                    sibling.Red = true;
+                    x = parent;
+                    parent = x.parent;
+                } else {
+                    if (sibling.left == null || !sibling.left.Red) {
+                        if (sibling.right != null) {
+                            sibling.right.Red = false;
+                        }
+                        sibling.Red = true;
+                        rotateLeft(sibling);
+                        sibling = parent.left;
+                    }
+                    sibling.Red = parent.Red;
+                    parent.Red = false;
+                    if (sibling.left != null) {
+                        sibling.left.Red = false;
+                    }
+                    rotateRight(parent);
+                    x = root;
+                }
+            }
+        }
+        if (x != null) {
+            x.Red = false;
+        }
+    }
+
+
+    RedBlackTreeNode search(RedBlackTreeNode root, int element){
+        if (root == null){
+            return root;
+        }
+
+        if (root.element == element){
+            System.out.println(root.element);
+            return root;
+        }
+
+        if (element < root.element){
+            return search(root.left, element);
+        } else return search(root.right, element);
+
+    }
+
 
 //---------------------------just traversals down there--------------------------------------------------------------//
 
