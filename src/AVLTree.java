@@ -9,7 +9,7 @@ public class AVLTree {
         AVLTreeNode left;
         AVLTreeNode right;
 
-        public AVLTreeNode(int element) //Constructor for node in AVL tree
+        public AVLTreeNode(int element) //constructor for node in AVL tree
         {
             this.left = null;
             this.right = null;
@@ -36,7 +36,7 @@ public class AVLTree {
             root.left = insert(root.left, element);
         } else if (element > root.element) {
             root.right = insert(root.right, element);
-        } else { // Duplicate keys not allowed
+        } else { //duplicate keys are not allowed
             return root;
         }
 
@@ -54,72 +54,50 @@ public class AVLTree {
             return root;
         }
 
-        if (element < root.element) {
+        if (element < root.element) { //traverse recursively until node we want to delete is found
             root.left = delete(root.left, element);
         } else if (element > root.element) {
             root.right = delete(root.right, element);
-        } else {
-            // node with only one child or no child
-            if ((root.left == null) || (root.right == null)) {
-                AVLTreeNode temp = null;
-                if (temp == root.left) {
-                    temp = root.right;
-                } else {
-                    temp = root.left;
-                }
-
-                // no child case
-                if (temp == null) {
-                    temp = root;
-                    root = null;
-                } else { // one child case
-                    root = temp; // Copy the contents of the non-empty child
-                }
-            } else {
-                // node with two children: Get the inorder successor (smallest
-                // in the right subtree)
-                AVLTreeNode temp = Min(root.right);
-
-                // Copy the inorder successor's data to this node
-                root.element = temp.element;
-
-                // Delete the inorder successor
-                root.right = delete(root.right, temp.element);
-            }
+            //code below now only happens if we found the element to be deleted
+        } else if ((root.left == null) && (root.right != null)){ //if node has only right child
+            root = root.right;
+        } else if ((root.right == null) && (root.left != null)){ //if node has only left child
+            root = root.left;
+        } else if ((root.left == null) && (root.right == null)){ //if node is childless
+            root = null;
+        } else { //if node has two children
+            AVLTreeNode node = Min(root.right); //get the smallest inorder in the right subtree
+            root.element = node.element; //copy its element to the root we deleted
+            root.right = delete(root.right, node.element); //delete the found successor
         }
 
-        // If the tree had only one node then return
-        if (root == null) {
+        if (root == null) { //check for when the node we deleted was the only one in the tree
             return root;
         }
 
-        // Update height of the current node
-        root.height = 1 + Math.max(getHeight(root.left), getHeight(root.right));
-
-        // Get the balance factor of this node to check whether this node became unbalanced
-        int balance = getBalance(root);
+        root.height = 1 + Math.max(getHeight(root.left), getHeight(root.right)); //update the height of the current node
+        int balance = getBalance(root); //get the balance factor of this node
         // Balance the tree if necessary
-        return BalanceAVLTree(root, balance);
+        return BalanceAVLTree(root, balance); //balance the tree
     }
-
 
 
     private AVLTreeNode BalanceAVLTree(AVLTreeNode node, int balance) {
         // left left case
-        if (balance > 1 && getHeight(node.left.left) >= getHeight(node.left.right)) {
+        if (balance > 1 && (getHeight(node.left.left) >= getHeight(node.left.right))) {
             node = AVLTreeRightRotation(node);
         }
         // right right case
-        else if (balance < -1 && getHeight(node.right.right) >= getHeight(node.right.left)) {
+        else if (balance < -1 && (getHeight(node.right.right) >= getHeight(node.right.left))) {
             node = AVLTreeLeftRotation(node);
         }
         // left right case
-        else if (balance > 1 && getHeight(node.left.left) < getHeight(node.left.right)) {
+        else if (balance > 1 && (getHeight(node.left.left) < getHeight(node.left.right))) {
             node.left = AVLTreeLeftRotation(node.left);
             node = AVLTreeRightRotation(node);
         }
         // right left case
-        else if (balance < -1 && getHeight(node.right.right) < getHeight(node.right.left)) {
+        else if (balance < -1 && (getHeight(node.right.right) < getHeight(node.right.left))) {
             node.right = AVLTreeRightRotation(node.right);
             node = AVLTreeLeftRotation(node);
         }
@@ -155,7 +133,7 @@ public class AVLTree {
     }
 
 
-    AVLTreeNode Min(AVLTreeNode node) { //helper function to find node with the minimum value in a subtree rooted at node given
+    private AVLTreeNode Min(AVLTreeNode node) { //helper function to find node with the minimum value in a subtree rooted at node given
         AVLTreeNode current = node;
 
         while (current.left != null)
@@ -164,24 +142,21 @@ public class AVLTree {
         return current;
     }
 
-    void search(int element){
-        root = search(root,element);
+    public void search(int element){
+        AVLTreeNode found = search(root, element);
     }
 
-    AVLTreeNode search(AVLTreeNode root, int element){
-        if (root == null){
-            return root;
+    private AVLTreeNode search(AVLTreeNode root, int element){
+        if (root == null) {
+            return null;
         }
-
-        if (root.element == element){
-            System.out.println(root.element);
-            return root;
-        }
-
-        if (element < root.element){
+        if (element < root.element) {
             return search(root.left, element);
-        } else return search(root.right, element);
-
+        } else if (element > root.element) {
+            return search(root.right, element);
+        } else {
+            return root;
+        }
     }
 
 

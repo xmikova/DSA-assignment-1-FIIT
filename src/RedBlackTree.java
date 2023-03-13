@@ -1,3 +1,6 @@
+//The implementation of Red-Black Tree and its functionalities: insert, delete, and search
+//Petra Miková, ID: 120852, summer term 22/23 - DSA
+
 public class RedBlackTree {
 
     static class RedBlackTreeNode{
@@ -7,9 +10,9 @@ public class RedBlackTree {
         RedBlackTreeNode right;
         RedBlackTreeNode parent;
 
-        public RedBlackTreeNode(int element){ // every new node is colored red
+        public RedBlackTreeNode(int element){ //constructor for node in Red-Black tree
             this.element = element;
-            this.Red = true;
+            this.Red = true; //every new node is colored red
             this.left = this.right = this.parent = null;
         }
     }
@@ -22,12 +25,9 @@ public class RedBlackTree {
 
 
     public void insert(int element) { //
+        RedBlackTreeNode newRedBlackTreeNode = new RedBlackTreeNode(element); //create a new node colored red
 
-        // Step 1: Create a new red node.
-        RedBlackTreeNode newRedBlackTreeNode = new RedBlackTreeNode(element);
-
-        // Step 2: Insert the node using the classic BST insertion algorithm
-        RedBlackTreeNode parent = null;
+        RedBlackTreeNode parent = null; // iterative standard BST insertion
         RedBlackTreeNode current = root;
         while (current != null) {
             parent = current;
@@ -38,36 +38,30 @@ public class RedBlackTree {
             }
         }
 
-        // Set the parent of the new node.
-        newRedBlackTreeNode.parent = parent;
+        newRedBlackTreeNode.parent = parent; //set the parent of the node
 
-        // Set the new node as the left or right child of its parent.
-        if (parent == null) {
-            // Tree is empty. Set new node as root.
-            root = newRedBlackTreeNode;
+        if (parent == null) { //now set the node as the left or right child
+            root = newRedBlackTreeNode; // only if tree is empty
         } else if (element < parent.element) {
             parent.left = newRedBlackTreeNode;
         } else {
             parent.right = newRedBlackTreeNode;
         }
 
-        // Step 3: Fix the Red-Black Tree properties that may have been violated by the insertion.
-        BalanceRedBlackTree(newRedBlackTreeNode);
+        InsertBalanceRedBlackTree(newRedBlackTreeNode); //balance the tree
     }
 
-    private void BalanceRedBlackTree(RedBlackTreeNode node) { //TODO: comment and understand the code there
-        // Case 1: The node is the root. Color it black and we're done.
-        if (node == root) {
+    private void InsertBalanceRedBlackTree(RedBlackTreeNode node) {
+        if (node == root) { //case where node is the root so we just need to color it black
             node.Red = false;
             return;
         }
 
-        // Case 2: The parent of the node is black. No violations, so we're done.
-        if (node.parent.Red == false) {
+        if (node.parent.Red == false) { //case where parent of the node is black, no balancing needed
             return;
         }
 
-        // Case 3: The parent and the uncle of the node are both red. Recolor them and move up the tree.
+        //case where parent and the uncle of the node are both red, color them black and move tree up
         RedBlackTreeNode parent = node.parent;
         RedBlackTreeNode uncle = getUncle(node);
 
@@ -75,88 +69,84 @@ public class RedBlackTree {
             parent.Red = false;
             uncle.Red = false;
             parent.parent.Red = true; //grandparent
-            BalanceRedBlackTree(parent.parent);
+            InsertBalanceRedBlackTree(parent.parent); //recursion
             return;
         }
 
-        // Case 4: The node is a right child and its parent is a left child. Rotate left.
+        //case where the node is a right child and its parent is a left child - left rotation required
         if (node == parent.right && parent == parent.parent.left) {
-            rotateLeft(parent);
+            RedBlackTreeLeftRotation(parent);
             node = node.left;
-        } else if (node == parent.left && parent == parent.parent.right) {
-            // Case 5: The node is a left child and its parent is a right child. Rotate right.
-            rotateRight(parent);
+        } else if (node == parent.left && parent == parent.parent.right) { //case where the node is a left child and its parent is a right child - right rotation required
+            RedBlackTreeRightRotation(parent);
             node = node.right;
         }
 
-        // Case 6: The node's parent is red, but the uncle is black. Recolor and rotate.
+        //case where the node's parent is red, but the uncle is black - recoloring and rotation required
         parent = node.parent;
-        parent.parent = parent.parent;
-
+        RedBlackTreeNode grandparent = parent.parent;
         parent.Red = false;
-        parent.parent.Red = true;
+        grandparent.Red = true;
 
-        if (node == parent.left && parent == parent.parent.left) {
-            rotateRight(parent.parent);
+        if (node == parent.left && parent == grandparent.left) {
+            RedBlackTreeRightRotation(grandparent);
         } else {
-            rotateLeft(parent.parent);
+            RedBlackTreeLeftRotation(grandparent);
         }
     }
 
     private RedBlackTreeNode getUncle(RedBlackTreeNode node) { //uncle getter
-        //RedBlackTreeNode grandparent = node.parent.parent;
-        if (node.parent.parent == null) {
-            return null; // No grandparent, so no uncle.
+        RedBlackTreeNode grandparent = node.parent.parent;
+        if (grandparent == null) {
+            return null; //no grandparent, so uncle does not exist
         }
-        if (node.parent == node.parent.parent.left) {
-            return node.parent.parent.right;
+        if (node.parent == grandparent.left) {
+            return grandparent.right;
         } else {
-            return node.parent.parent.left;
+            return grandparent.left;
         }
     }
 
-    private void rotateLeft(RedBlackTreeNode x) {
-        RedBlackTreeNode y = x.right;
-        x.right = y.left;
-        if (y.left != null) {
-            y.left.parent = x;
+    private void RedBlackTreeRightRotation(RedBlackTreeNode node) {
+        RedBlackTreeNode leftChild = node.left;
+        node.left = leftChild.right;
+        if (leftChild.right != null) {
+            leftChild.right.parent = node;
         }
-        y.parent = x.parent;
-        if (x.parent == null) {
-            root = y;
-        } else if (x == x.parent.left) {
-            x.parent.left = y;
+        leftChild.parent = node.parent;
+        if (node.parent == null) {
+            root = leftChild;
+        } else if (node == node.parent.left) {
+            node.parent.left = leftChild;
         } else {
-            x.parent.right = y;
+            node.parent.right = leftChild;
         }
-        y.left = x;
-        x.parent = y;
+        leftChild.right = node;
+        node.parent = leftChild;
     }
-
-    private void rotateRight(RedBlackTreeNode y) {
-        RedBlackTreeNode x = y.left;
-        y.left = x.right;
-        if (x.right != null) {
-            x.right.parent = y;
+    private void RedBlackTreeLeftRotation(RedBlackTreeNode node) {
+        RedBlackTreeNode rightChild = node.right;
+        node.right = rightChild.left;
+        if (rightChild.left != null) {
+            rightChild.left.parent = node;
         }
-        x.parent = y.parent;
-        if (y.parent == null) {
-            root = x;
-        } else if (y == y.parent.left) {
-            y.parent.left = x;
+        rightChild.parent = node.parent;
+        if (node.parent == null) {
+            root = rightChild;
+        } else if (node == node.parent.left) {
+            node.parent.left = rightChild;
         } else {
-            y.parent.right = x;
+            node.parent.right = rightChild;
         }
-        x.right = y;
-        y.parent = x;
+        rightChild.left = node;
+        node.parent = rightChild;
     }
-
 
     public void delete(int element) {
         RedBlackTreeNode nodeToDelete = root;
         while (nodeToDelete != null) {
             if (element == nodeToDelete.element) {
-                deleteNode(nodeToDelete);
+                delete(nodeToDelete);
                 return;
             } else if (element < nodeToDelete.element) {
                 nodeToDelete = nodeToDelete.left;
@@ -166,133 +156,130 @@ public class RedBlackTree {
         }
     }
 
-    private void deleteNode(RedBlackTreeNode nodeToDelete) {
-        RedBlackTreeNode child, sibling;
-        boolean originalColor = nodeToDelete.Red;
+    private void delete(RedBlackTreeNode nodeToDelete) {
+        RedBlackTreeNode child;
+        boolean nodeColor = nodeToDelete.Red;
 
-        if (nodeToDelete.left != null && nodeToDelete.right != null) {
-            // node has two children, find successor and replace nodeToDelete with it
+        if (nodeToDelete.left != null && nodeToDelete.right != null) { //case where node has two children
             RedBlackTreeNode successor = nodeToDelete.right;
             while (successor.left != null) {
                 successor = successor.left;
             }
-            originalColor = successor.Red;
+            nodeColor = successor.Red;
             nodeToDelete.element = successor.element;
             nodeToDelete = successor;
         }
 
-        // node has one child or no children
+        // case where node has one child or no children
         child = nodeToDelete.left != null ? nodeToDelete.left : nodeToDelete.right;
 
         if (child != null) {
-            // update child's parent reference
             child.parent = nodeToDelete.parent;
         }
 
-        if (nodeToDelete.parent == null) {
-            // nodeToDelete is the root
+        if (nodeToDelete.parent == null) { //if node to be deleted is the root, so has no parent
             root = child;
         } else if (nodeToDelete == nodeToDelete.parent.left) {
             nodeToDelete.parent.left = child;
         } else {
             nodeToDelete.parent.right = child;
         }
-
-        // fixup the tree to maintain red-black properties
-        if (!originalColor) {
+        if (nodeColor == false) { //balance the tree
             if (child != null && child.Red) {
                 child.Red = false;
             } else {
-                deleteFixup(child, nodeToDelete.parent);
+                DeleteBalanceRedBlackTree(child, nodeToDelete.parent);
             }
         }
     }
 
 
-    private void deleteFixup(RedBlackTreeNode x, RedBlackTreeNode parent) {
+    private void DeleteBalanceRedBlackTree(RedBlackTreeNode node, RedBlackTreeNode parent) {
         RedBlackTreeNode sibling;
-        while (x != root && (x == null || !x.Red)) {
-            if (x == parent.left) {
+        while (node != root && (node == null || node.Red == false)) {
+            if (node == parent.left) { //case where deleted node is the left child
                 sibling = parent.right;
-                if (sibling.Red) {
+                if (sibling.Red == true) { //1.1 when the sibling of the deleted node is red
                     sibling.Red = false;
                     parent.Red = true;
-                    rotateLeft(parent);
+                    RedBlackTreeLeftRotation(parent);
                     sibling = parent.right;
                 }
-                if ((sibling.left == null || !sibling.left.Red) && (sibling.right == null || !sibling.right.Red)) {
+                if ((sibling.left == null || sibling.left.Red == false) && (sibling.right == null || sibling.right.Red == false)) { //2.1 both children of the sibling of the deleted node are black
                     sibling.Red = true;
-                    x = parent;
-                    parent = x.parent;
+                    node = parent;
+                    parent = node.parent;
                 } else {
-                    if (sibling.right == null || !sibling.right.Red) {
+                    if (sibling.right == null || sibling.right.Red == false) { //3.1 the sibling of the deleted node has a black right child and red left child
                         if (sibling.left != null) {
                             sibling.left.Red = false;
                         }
                         sibling.Red = true;
-                        rotateRight(sibling);
+                        RedBlackTreeRightRotation(sibling);
                         sibling = parent.right;
                     }
-                    sibling.Red = parent.Red;
+                    sibling.Red = parent.Red; //4.1 sibling is black, and its right child is red
                     parent.Red = false;
                     if (sibling.right != null) {
                         sibling.right.Red = false;
                     }
-                    rotateLeft(parent);
-                    x = root;
+                    RedBlackTreeLeftRotation(parent);
+                    node = root;
                 }
-            } else {
+            } else { //case where deleted node is the right child
                 sibling = parent.left;
-                if (sibling.Red) {
+                if (sibling.Red == true) { //1.2 when the sibling of the deleted node is red
                     sibling.Red = false;
                     parent.Red = true;
-                    rotateRight(parent);
+                    RedBlackTreeRightRotation(parent);
                     sibling = parent.left;
                 }
-                if ((sibling.left == null || !sibling.left.Red) && (sibling.right == null || !sibling.right.Red)) {
+                if ((sibling.left == null || sibling.left.Red == false) && (sibling.right == null || sibling.right.Red == false)) { //2.2 both children of the sibling of the deleted node are black
                     sibling.Red = true;
-                    x = parent;
-                    parent = x.parent;
+                    node = parent;
+                    parent = node.parent;
                 } else {
-                    if (sibling.left == null || !sibling.left.Red) {
+                    if (sibling.left == null || sibling.left.Red == false) { //3.2 the sibling of the deleted node has a black left child and red right child
                         if (sibling.right != null) {
                             sibling.right.Red = false;
                         }
                         sibling.Red = true;
-                        rotateLeft(sibling);
+                        RedBlackTreeLeftRotation(sibling);
                         sibling = parent.left;
                     }
-                    sibling.Red = parent.Red;
+                    sibling.Red = parent.Red; //4.2 sibling is black, and its left child is red
                     parent.Red = false;
                     if (sibling.left != null) {
                         sibling.left.Red = false;
                     }
-                    rotateRight(parent);
-                    x = root;
+                    RedBlackTreeRightRotation(parent);
+                    node = root;
                 }
             }
         }
-        if (x != null) {
-            x.Red = false;
+        if (node != null) {
+            node.Red = false;
         }
     }
 
 
-    RedBlackTreeNode search(RedBlackTreeNode root, int element){
-        if (root == null){
-            return root;
-        }
+    public void search(int element){
+        RedBlackTreeNode found = search(root, element);
+    }
 
-        if (root.element == element){
-            System.out.println(root.element);
-            return root;
+    private RedBlackTreeNode search(RedBlackTreeNode root, int element){
+        if (root == null) {
+            return null;
         }
-
-        if (element < root.element){
+        if (element < root.element) {
             return search(root.left, element);
-        } else return search(root.right, element);
-
+        } else if (element > root.element) {
+            return search(root.right, element);
+        } else {
+            return root;
+        }
     }
+
 
 
 //---------------------------just traversals down there--------------------------------------------------------------//
