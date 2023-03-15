@@ -88,49 +88,49 @@ public class Main {
 //        Duration timeElapsed2 = Duration.between(start2, end2);
 //        System.out.println("Time elapsed for 10M delete: " + timeElapsed2.toMillis() + " milliseconds");
 
-        Instant start3 = Instant.now();
-
-        for (int i = 0; i < 10000000; i++){
-            //AVLTree.insert(ThreadLocalRandom.current().nextInt(0, 1000000 + 1));
-            //AVLTree.insert(random.nextInt(1000000) + 1);
-            RedBlackTree.insert(numbers[i]);
-
-        }
-        Instant end3 = Instant.now();
-        Duration timeElapsed3 = Duration.between(start3, end3);
-        System.out.println("Time elapsed for 10M insert: " + timeElapsed3.toMillis() + " milliseconds\n");
-
-        Instant start11 = Instant.now();
-
-        for (int k = 0; k < 10000000; k++){
-
-            //AVLTree.insert(ThreadLocalRandom.current().nextInt(0, 1000000 + 1));
-            //AVLTree.insert(random.nextInt(1000000) + 1);
-            RedBlackTree.search(numbers2[k]);
-
-        }
-
-
-        Instant end11 = Instant.now();
-        Duration timeElapsed11 = Duration.between(start11, end11);
-        System.out.println("Time elapsed for 10M search: " + timeElapsed11.toMillis() + " milliseconds");
-
-
-        Instant start4 = Instant.now();
-
-        for (int j = 0; j < 10000000; j++){
-
-            //AVLTree.insert(ThreadLocalRandom.current().nextInt(0, 1000000 + 1));
-            //AVLTree.insert(random.nextInt(1000000) + 1);
-            RedBlackTree.delete(numbers[j]);
-
-        }
-
-
-        Instant end4 = Instant.now();
-        Duration timeElapsed4 = Duration.between(start4, end4);
-        System.out.println("Time elapsed for 10M delete: " + timeElapsed4.toMillis() + " milliseconds");
+//        Instant start3 = Instant.now();
 //
+//        for (int i = 0; i < 10000000; i++){
+//            //AVLTree.insert(ThreadLocalRandom.current().nextInt(0, 1000000 + 1));
+//            //AVLTree.insert(random.nextInt(1000000) + 1);
+//            RedBlackTree.insert(numbers[i]);
+//
+//        }
+//        Instant end3 = Instant.now();
+//        Duration timeElapsed3 = Duration.between(start3, end3);
+//        System.out.println("Time elapsed for 10M insert: " + timeElapsed3.toMillis() + " milliseconds\n");
+//
+//        Instant start11 = Instant.now();
+//
+//        for (int k = 0; k < 10000000; k++){
+//
+//            //AVLTree.insert(ThreadLocalRandom.current().nextInt(0, 1000000 + 1));
+//            //AVLTree.insert(random.nextInt(1000000) + 1);
+//            RedBlackTree.search(numbers2[k]);
+//
+//        }
+//
+//
+//        Instant end11 = Instant.now();
+//        Duration timeElapsed11 = Duration.between(start11, end11);
+//        System.out.println("Time elapsed for 10M search: " + timeElapsed11.toMillis() + " milliseconds");
+//
+//
+//        Instant start4 = Instant.now();
+//
+//        for (int j = 0; j < 10000000; j++){
+//
+//            //AVLTree.insert(ThreadLocalRandom.current().nextInt(0, 1000000 + 1));
+//            //AVLTree.insert(random.nextInt(1000000) + 1);
+//            RedBlackTree.delete(numbers[j]);
+//
+//        }
+//
+//
+//        Instant end4 = Instant.now();
+//        Duration timeElapsed4 = Duration.between(start4, end4);
+//        System.out.println("Time elapsed for 10M delete: " + timeElapsed4.toMillis() + " milliseconds");
+////
 //        AVLTree.inorder();
 //        System.out.println("\n");
 //
@@ -172,6 +172,18 @@ public class Main {
 ////        System.out.format("Milli = %s, ( S_Start : %s, S_End : %s ) \n", duration, startTime, endTime );
 //
 //       //RedBlackTree.printPostorder();
+
+        ChainingHashTable<String, Integer> HT = new ChainingHashTable<>();
+        HT.put("peto", 907549499);
+        HT.put("andrejko", 447585949);
+        HT.put("andrejko", 447885949);
+
+        HT.put("porafanidnvfo", 7);
+
+
+
+
+        System.out.println(HT.toString());
 
     }
 
