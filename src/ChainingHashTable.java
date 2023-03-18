@@ -3,27 +3,25 @@ public class ChainingHashTable<Key, Value> {
         Key key;
         Value value;
         ChainingHashTableNode<Key, Value> next;
-        ChainingHashTableNode<Key, Value> head; //pointer to the head of the bucket, needed for resizing
 
 
-         public ChainingHashTableNode(Key key, Value value) {
+         public ChainingHashTableNode(Key key, Value value) { //constructor
             this.key = key;
             this.value = value;
             this.next = null;
-            this.head = null;
         }
     }
+
     private static final int def_capacity = 16;
     private static final float def_lf = 0.75f;
     private static final float min_lf = 0.25f;
-
     private ChainingHashTableNode<Key, Value>[] table;
     private int size;
     private int capacity;
     private float loadFactor;
     private int threshold;
 
-    public ChainingHashTable() {
+    public ChainingHashTable() { //constructor
         this.loadFactor = def_lf;
         this.capacity = def_capacity;
         this.threshold = (int) (capacity * loadFactor);
@@ -71,15 +69,50 @@ public class ChainingHashTable<Key, Value> {
         }
     }
 
-    private void Upsize() {
-        int newCapacity = capacity * 2; //powers of two
-        ChainingHashTableNode<Key, Value>[] newTable = new ChainingHashTableNode[newCapacity];
+    public void remove(Key key) {
+        int index = getIndex(key,capacity);
+        ChainingHashTableNode<Key,Value> node = table[index];
+        ChainingHashTableNode<Key, Value> prevNode = null;
+        while (node != null) {
+            if (node.key.equals(key)) {
+                if (prevNode == null) {
+                    table[index] = node.next;
+                } else {
+                    prevNode.next = node.next;
+                }
+                size--;
+                if (size < min_lf * capacity) {
+                    Downsize();
+                }
+            }
+            prevNode = node;
+            node = node.next;
+        }
+    }
 
-        for (int i = 0; i < capacity; i++) { //rehashing
+    public Value get(Key key) {
+        int index = getIndex(key,capacity);
+        ChainingHashTableNode<Key, Value> node = table[index];
+        while (node != null) {
+            if (node.key.equals(key)) {
+                System.out.println(node.value);
+                return node.value;
+            }
+            node = node.next;
+        }
+        return null;
+    }
+
+
+    private void Upsize() {
+        int capacity = this.capacity * 2; //powers of two
+        ChainingHashTableNode<Key, Value>[] newTable = new ChainingHashTableNode[capacity];
+
+        for (int i = 0; i < this.capacity; i++) { //rehashing
             ChainingHashTableNode<Key, Value> node = table[i];
             while (node != null) {
                 ChainingHashTableNode<Key, Value> next = node.next;
-                int newIndex = getIndex(node.key, newCapacity);
+                int newIndex = getIndex(node.key, capacity);
                 node.next = newTable[newIndex];
                 newTable[newIndex] = node;
                 node = next;
@@ -88,27 +121,28 @@ public class ChainingHashTable<Key, Value> {
 
         // update the fields with the new values
         table = newTable;
-        capacity = newCapacity;
+        this.capacity = capacity;
         threshold = (int) (capacity * loadFactor);
+
     }
 
     private void Downsize() {
-        int newCapacity = capacity / 2;
-        ChainingHashTableNode<Key, Value>[] newTable = new ChainingHashTableNode[newCapacity];
-        int newThreshold = (int) (newCapacity * loadFactor);
-        for (int i = 0; i < capacity; i++) {
+        int capacity = this.capacity / 2;
+        ChainingHashTableNode<Key, Value>[] newTable = new ChainingHashTableNode[capacity];
+
+        for (int i = 0; i < this.capacity; i++) {
             ChainingHashTableNode<Key, Value> node = table[i];
             while (node != null) {
                 ChainingHashTableNode<Key, Value> next = node.next;
-                int newIndex = getIndex(node.key, newCapacity);
+                int newIndex = getIndex(node.key, capacity);
                 node.next = newTable[newIndex];
                 newTable[newIndex] = node;
                 node = next;
             }
         }
         table = newTable;
-        capacity = newCapacity;
-        threshold = newThreshold;
+        this.capacity = capacity;
+        threshold = (int) (capacity * loadFactor);
 
     }
 
