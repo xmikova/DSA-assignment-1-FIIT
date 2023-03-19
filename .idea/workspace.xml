@@ -4,7 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="75cecb0a-929e-4b2e-8a73-8dcd4d077c2f" name="Changes" comment="Final implementations of functionalities of AVL and RBT with comments, printing out not finished">
+    <list default="true" id="75cecb0a-929e-4b2e-8a73-8dcd4d077c2f" name="Changes" comment="working hash table w chaining first proposal">
+      <change afterPath="$PROJECT_DIR$/src/QuadraticProbingHashTable.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ChainingHashTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ChainingHashTable.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
@@ -184,7 +185,14 @@
       <option name="project" value="LOCAL" />
       <updated>1678750966818</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="working hash table w chaining first proposal">
+      <created>1679144906448</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1679144906448</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -210,7 +218,8 @@
     <MESSAGE value="AVL Tree delete implementation 2nd try" />
     <MESSAGE value="AVL tree working insert &amp; delete" />
     <MESSAGE value="Final implementations of functionalities of AVL and RBT with comments, printing out not finished" />
-    <option name="LAST_COMMIT_MESSAGE" value="Final implementations of functionalities of AVL and RBT with comments, printing out not finished" />
+    <MESSAGE value="working hash table w chaining first proposal" />
+    <option name="LAST_COMMIT_MESSAGE" value="working hash table w chaining first proposal" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

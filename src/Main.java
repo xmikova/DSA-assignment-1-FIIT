@@ -177,15 +177,25 @@ public class Main {
         HT.put("peto", 907549499);
         HT.put("andrejko", 447585949);
         HT.put("andrejko", 447885949);
-        HT.remove("andrejko");
+        HT.remove("andro");
 
         HT.put("porafanidnvfo", 7);
         HT.get("peto");
+
+        QuadraticProbingHashTable<String, Integer> HT2 = new QuadraticProbingHashTable<>();
+        HT2.put("peto", 907549499);
+        HT2.put("sfcadfcdafc", 97549499);
+        HT2.remove("sfcadfcdafc");
+
+
+
 
 
 
 
         System.out.println(HT.toString());
+        System.out.println(HT2.toString());
+
 
     }
 
