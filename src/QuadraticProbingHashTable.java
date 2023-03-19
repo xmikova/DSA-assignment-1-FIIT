@@ -116,18 +116,25 @@ public class QuadraticProbingHashTable<Key, Value> {
 
 
     private void Upsize() {
-        int oldCapacity = capacity;
-        capacity *= 2;
-        QuadraticProbingHashTableNode<Key, Value>[] oldTable = table;
-        table = (QuadraticProbingHashTableNode<Key, Value>[]) new QuadraticProbingHashTableNode[capacity];
+        int newCapacity = capacity * 2;
+        QuadraticProbingHashTableNode<Key, Value>[] newTable = new QuadraticProbingHashTableNode[newCapacity];
         size = 0;
-        threshold = (int) (capacity * loadFactor);
 
-        for (int i = 0; i < oldCapacity; i++) {
-            if (oldTable[i] != null) {
-                put(oldTable[i].key, oldTable[i].value);
+        for (int i = 0; i < capacity; i++) {
+            QuadraticProbingHashTableNode<Key, Value> node = table[i];
+            while (node != null) {
+                QuadraticProbingHashTableNode<Key, Value> next = node.next;
+                int newIndex = getIndex(node.key, newCapacity);
+                node.next = newTable[newIndex];
+                newTable[newIndex] = node;
+                size++;
+                node = next;
             }
         }
+
+        table = newTable;
+        capacity = newCapacity;
+        threshold = (int) (capacity * loadFactor);
     }
 
     private void Downsize() {

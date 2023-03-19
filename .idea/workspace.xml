@@ -4,12 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="75cecb0a-929e-4b2e-8a73-8dcd4d077c2f" name="Changes" comment="quadratic probing hashtable first proposal put and remove">
+    <list default="true" id="75cecb0a-929e-4b2e-8a73-8dcd4d077c2f" name="Changes" comment="complete assignment not final, first proposal">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ChainingHashTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ChainingHashTable.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/QuadraticProbingHashTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/QuadraticProbingHashTable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/RedBlackTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RedBlackTree.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -199,7 +198,14 @@
       <option name="project" value="LOCAL" />
       <updated>1679241660216</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="complete assignment not final, first proposal">
+      <created>1679264544598</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1679264544598</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -227,7 +233,8 @@
     <MESSAGE value="Final implementations of functionalities of AVL and RBT with comments, printing out not finished" />
     <MESSAGE value="working hash table w chaining first proposal" />
     <MESSAGE value="quadratic probing hashtable first proposal put and remove" />
-    <option name="LAST_COMMIT_MESSAGE" value="quadratic probing hashtable first proposal put and remove" />
+    <MESSAGE value="complete assignment not final, first proposal" />
+    <option name="LAST_COMMIT_MESSAGE" value="complete assignment not final, first proposal" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

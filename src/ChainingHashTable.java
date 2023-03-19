@@ -32,8 +32,8 @@ public class ChainingHashTable<Key, Value> {
 
     private int hash(String key, int capacity) {
         int hashCode = hashFunction(key);
-        int index = Math.abs(hashCode) % capacity;
-        return index;
+        int index = hashCode % capacity;
+        return index < 0 ? index + capacity : index;
     }
 
     private int hashFunction(String key) {
@@ -103,8 +103,9 @@ public class ChainingHashTable<Key, Value> {
 
 
     private void Upsize() {
-        int capacity = this.capacity * 2; //powers of two
-        ChainingHashTableNode<Key, Value>[] newTable = new ChainingHashTableNode[capacity];
+        int newCapacity = capacity * 2;
+        threshold = (int) (newCapacity * loadFactor);
+        ChainingHashTableNode<Key, Value>[] newTable = new ChainingHashTableNode[newCapacity];
 
         for (int i = 0; i < this.capacity; i++) { //rehashing
             ChainingHashTableNode<Key, Value> node = table[i];
@@ -119,14 +120,14 @@ public class ChainingHashTable<Key, Value> {
 
         // update the fields with the new values
         table = newTable;
-        this.capacity = capacity;
-        threshold = (int) (capacity * loadFactor);
+        capacity = newCapacity;
 
     }
 
     private void Downsize() {
-        int capacity = this.capacity / 2;
-        ChainingHashTableNode<Key, Value>[] newTable = new ChainingHashTableNode[capacity];
+        int newCapacity = capacity / 2;
+        threshold = (int) (newCapacity * loadFactor);
+        ChainingHashTableNode<Key, Value>[] newTable = new ChainingHashTableNode[newCapacity];
 
         for (int i = 0; i < this.capacity; i++) {
             ChainingHashTableNode<Key, Value> node = table[i];
@@ -139,8 +140,7 @@ public class ChainingHashTable<Key, Value> {
             }
         }
         table = newTable;
-        this.capacity = capacity;
-        threshold = (int) (capacity * loadFactor);
+        capacity = newCapacity;
 
     }
 

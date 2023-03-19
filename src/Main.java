@@ -214,14 +214,16 @@ public class Main {
 //        System.out.println(HT.toString());
 //        System.out.println(HT2.toString());
 
-        Instant start77 = Instant.now();
+
 
         for (int i = 0; i < 10000000; i++){
             //AVLTree.insert(ThreadLocalRandom.current().nextInt(0, 1000000 + 1));
             //AVLTree.insert(random.nextInt(1000000) + 1);
-            HT.put(strings[i], numbers[i]);
+            HT2.put(strings[i], numbers[i]);
 
         }
+        Instant start77 = Instant.now();
+        HT2.put("ndfbsibfisbfso",885989585);
         Instant end77 = Instant.now();
         Duration timeElapsed77 = Duration.between(start77, end77);
         System.out.println("Time elapsed for 10M insert: " + timeElapsed77.toMillis() + " milliseconds\n");
