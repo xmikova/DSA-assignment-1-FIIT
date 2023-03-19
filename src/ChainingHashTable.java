@@ -31,16 +31,18 @@ public class ChainingHashTable<Key, Value> {
 
 
     private int hash(String key, int capacity) {
-        return hashFunction(key) % capacity;
+        int hashCode = hashFunction(key);
+        int index = Math.abs(hashCode) % capacity;
+        return index;
     }
 
     private int hashFunction(String key) {
-        int hashValue = 0;
+        int hash = 0x811c9dc5;
         for (int i = 0; i < key.length(); i++) {
-            int charValue = (int) key.charAt(i);
-            hashValue += charValue * (i + 1);
+            hash ^= key.charAt(i);
+            hash *= 0x01000193;
         }
-        return hashValue;
+        return hash;
     }
 
     private int getIndex(Key key, int capacity){
@@ -63,21 +65,17 @@ public class ChainingHashTable<Key, Value> {
             size++;
             if (size >= threshold) {
                 Upsize();
-            } else if (size < (capacity * min_lf)) {
-                Downsize();
             }
-        }
     }
-
+    }
     public void remove(Key key) {
         int index = getIndex(key,capacity);
         ChainingHashTableNode<Key,Value> node = table[index];
         ChainingHashTableNode<Key, Value> prevNode = null;
         while (node != null) {
             if (node.key.equals(key)) {
-                if (prevNode == null) {
-                    table[index] = node.next;
-                } else {
+                if (prevNode == null) table[index] = node.next;
+                else {
                     prevNode.next = node.next;
                 }
                 size--;

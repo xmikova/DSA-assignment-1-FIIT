@@ -52,7 +52,7 @@ public class RedBlackTree {
     }
 
     private void InsertBalanceRedBlackTree(RedBlackTreeNode node) {
-        if (node == root) { //case where node is the root so we just need to color it black
+        if (node == root) { //case where node is the root, so we just need to color it black
             node.Red = false;
             return;
         }

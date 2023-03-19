@@ -20,6 +20,23 @@ public class Main {
             numbers2[i] = random.nextInt(10000000);
 
         }
+
+        Instant start = Instant.now();
+
+        int arrayLength = 10000000;
+        String[] strings = new String[arrayLength];
+
+        for (int i = 0; i < arrayLength; i++) {
+            strings[i] = generateRandomString(random.nextInt(10) + 1);
+        }
+
+        Instant end = Instant.now();
+        Duration timeElapsed = Duration.between(start, end);
+        System.out.println("Time elapsed for 10M insert: " + timeElapsed.toMillis() + " milliseconds\n");
+
+
+        // Print the generated strings
+
 //        AVLTree.insert(5);
 //        AVLTree.insert(45);
 //        AVLTree.insert(10);
@@ -193,11 +210,38 @@ public class Main {
 
 
 
-        System.out.println(HT.toString());
-        System.out.println(HT2.toString());
+
+//        System.out.println(HT.toString());
+//        System.out.println(HT2.toString());
+
+        Instant start77 = Instant.now();
+
+        for (int i = 0; i < 10000000; i++){
+            //AVLTree.insert(ThreadLocalRandom.current().nextInt(0, 1000000 + 1));
+            //AVLTree.insert(random.nextInt(1000000) + 1);
+            HT.put(strings[i], numbers[i]);
+
+        }
+        Instant end77 = Instant.now();
+        Duration timeElapsed77 = Duration.between(start77, end77);
+        System.out.println("Time elapsed for 10M insert: " + timeElapsed77.toMillis() + " milliseconds\n");
 
 
     }
+
+    private static String generateRandomString(int length) {
+        final String CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        Random random = new Random();
+
+        StringBuilder sb = new StringBuilder(length);
+        for (int i = 0; i < length; i++) {
+            int randomIndex = random.nextInt(CHARACTERS.length());
+            sb.append(CHARACTERS.charAt(randomIndex));
+        }
+
+        return sb.toString();
+    }
+
 
 
 

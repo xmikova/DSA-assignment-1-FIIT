@@ -30,16 +30,18 @@ public class QuadraticProbingHashTable<Key, Value> {
     }
 
     private int hash(String key, int capacity) {
-        return hashFunction(key) % capacity;
+        int hashCode = hashFunction(key);
+        int index = Math.abs(hashCode) % capacity;
+        return index;
     }
 
     private int hashFunction(String key) {
-        int hashValue = 0;
+        int hash = 0x811c9dc5;
         for (int i = 0; i < key.length(); i++) {
-            int charValue = (int) key.charAt(i);
-            hashValue += charValue * (i + 1);
+            hash ^= key.charAt(i);
+            hash *= 0x01000193;
         }
-        return hashValue;
+        return hash;
     }
 
     private int getIndex(Key key, int capacity){
@@ -93,6 +95,22 @@ public class QuadraticProbingHashTable<Key, Value> {
                 put(node.key, node.value);
                 nextIndex = (nextIndex + 1) % capacity;
             }
+        }
+    }
+
+    public Value get(Key key) {
+        int index = getIndex(key, capacity);
+        int i = 0;
+
+        while (table[index] != null && !table[index].key.equals(key)) {
+            i++;
+            index = (index + i * i) % capacity;
+        }
+
+        if (table[index] != null && table[index].key.equals(key)) {
+            return table[index].value;
+        } else {
+            return null;
         }
     }
 
