@@ -31,8 +31,8 @@ public class QuadraticProbingHashTable<Key, Value> {
 
     private int hash(String key, int capacity) {
         int hashCode = hashFunction(key);
-        int index = Math.abs(hashCode) % capacity;
-        return index;
+        int index = hashCode % capacity;
+        return index < 0 ? index + capacity : index;
     }
 
     private int hashFunction(String key) {
@@ -66,8 +66,6 @@ public class QuadraticProbingHashTable<Key, Value> {
 
             if (size >= threshold) {
                 Upsize();
-            } else if (size < (capacity * min_lf)) {
-                Downsize();
             }
         }
     }
@@ -94,6 +92,9 @@ public class QuadraticProbingHashTable<Key, Value> {
                 size--;
                 put(node.key, node.value);
                 nextIndex = (nextIndex + 1) % capacity;
+                if (size < min_lf * capacity) {
+                    Downsize();
+                }
             }
         }
     }
@@ -122,15 +123,17 @@ public class QuadraticProbingHashTable<Key, Value> {
 
         for (int i = 0; i < capacity; i++) {
             QuadraticProbingHashTableNode<Key, Value> node = table[i];
-            while (node != null) {
-                QuadraticProbingHashTableNode<Key, Value> next = node.next;
-                int newIndex = getIndex(node.key, newCapacity);
-                node.next = newTable[newIndex];
-                newTable[newIndex] = node;
-                size++;
-                node = next;
+            if (node != null) {
+                int index = getIndex(node.key, newCapacity);
+                int j = 0;
+                while (newTable[index] != null) {
+                    j++;
+                    index = (index + j * j) % newCapacity;
+                }
+                newTable[index] = node;
             }
         }
+
 
         table = newTable;
         capacity = newCapacity;

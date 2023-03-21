@@ -228,7 +228,7 @@ public class Main {
         Duration timeElapsed77 = Duration.between(start77, end77);
         System.out.println("Time elapsed for 10M insert: " + timeElapsed77.toMillis() + " milliseconds\n");
 
-
+        HT2.remove("fejfbe");
     }
 
     private static String generateRandomString(int length) {

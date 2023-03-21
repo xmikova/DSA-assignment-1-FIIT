@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="75cecb0a-929e-4b2e-8a73-8dcd4d077c2f" name="Changes" comment="complete assignment not final, first proposal">
+    <list default="true" id="75cecb0a-929e-4b2e-8a73-8dcd4d077c2f" name="Changes" comment="working hashtables for 10M nodes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ChainingHashTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ChainingHashTable.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
@@ -205,7 +205,14 @@
       <option name="project" value="LOCAL" />
       <updated>1679264544598</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="working hashtables for 10M nodes">
+      <created>1679269647374</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1679269647374</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -234,7 +241,8 @@
     <MESSAGE value="working hash table w chaining first proposal" />
     <MESSAGE value="quadratic probing hashtable first proposal put and remove" />
     <MESSAGE value="complete assignment not final, first proposal" />
-    <option name="LAST_COMMIT_MESSAGE" value="complete assignment not final, first proposal" />
+    <MESSAGE value="working hashtables for 10M nodes" />
+    <option name="LAST_COMMIT_MESSAGE" value="working hashtables for 10M nodes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

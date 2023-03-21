@@ -66,7 +66,7 @@ public class ChainingHashTable<Key, Value> {
             if (size >= threshold) {
                 Upsize();
             }
-    }
+        }
     }
     public void remove(Key key) {
         int index = getIndex(key,capacity);
@@ -118,7 +118,6 @@ public class ChainingHashTable<Key, Value> {
             }
         }
 
-        // update the fields with the new values
         table = newTable;
         capacity = newCapacity;
 
