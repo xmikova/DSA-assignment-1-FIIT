@@ -1,3 +1,6 @@
+//The implementation of the hash table with quadratic probing (open addressing) collision resolution and its functionalities: put, remove, and get.
+//Petra Miková, ID: 120852, summer term 22/23 - DSA
+
 public class QuadraticProbingHashTable<Key, Value> {
     static class QuadraticProbingHashTableNode<Key, Value> {
         Key key;
@@ -5,7 +8,7 @@ public class QuadraticProbingHashTable<Key, Value> {
         QuadraticProbingHashTableNode<Key, Value> next;
 
 
-        public QuadraticProbingHashTableNode(Key key, Value value) { //constructor
+        public QuadraticProbingHashTableNode(Key key, Value value) { //Constructor for a "node" in a hash table.
             this.key = key;
             this.value = value;
             this.next = null;
@@ -25,17 +28,17 @@ public class QuadraticProbingHashTable<Key, Value> {
         this.loadFactor = def_lf;
         this.capacity = def_capacity;
         this.threshold = (int) (capacity * loadFactor);
-        this.table = (QuadraticProbingHashTableNode<Key, Value>[]) new QuadraticProbingHashTableNode[capacity]; //create a hash table with the nodes and a capacity given
+        this.table = (QuadraticProbingHashTableNode<Key, Value>[]) new QuadraticProbingHashTableNode[capacity]; //Create a hash table with the nodes and a capacity given.
         this.size = 0;
     }
 
-    private int hash(String key, int capacity) {
+    private int hash(String key, int capacity) { //A hash method that takes the hashcode computed and modulo it with capacity to return the index for key.
         int hashCode = hashFunction(key);
         int index = hashCode % capacity;
-        return index < 0 ? index + capacity : index;
+        return index < 0 ? (index + capacity) % capacity : index; //To overcome getting outbound index errors.
     }
 
-    private int hashFunction(String key) {
+    private int hashFunction(String key) { //A hashing function inspired with FNV1 hashing function.
         int hash = 0x811c9dc5;
         for (int i = 0; i < key.length(); i++) {
             hash ^= key.charAt(i);
@@ -44,33 +47,34 @@ public class QuadraticProbingHashTable<Key, Value> {
         return hash;
     }
 
-    private int getIndex(Key key, int capacity){
+    private int getIndex(Key key, int capacity){ //Index getter method - simply returns the index.
         int index = hash(key.toString(),capacity);
         return index;
     }
 
     public void put(Key key, Value value) {
         int index = getIndex(key, capacity);
-        int i = 0;
+        int i = 0; //The initial probe number is set to 0.
 
-        while (table[index] != null && !table[index].key.equals(key)) {
+        while (table[index] != null && !table[index].key.equals(key)) { //Case where the slot is not empty and the key does not match the key present in this slot.
             i++;
-            index = (index + i * i) % capacity;
+            index = (index + i * i) % capacity; //Quadratic probing - adding the square of probe number to current index and modulo this with capacity.
         }
 
         if (table[index] != null && table[index].key.equals(key)) {
-            table[index].value = value;
+            table[index].value = value; //Update the value if the key is equal to the one in the slot.
         } else {
-            table[index] = new QuadraticProbingHashTableNode<>(key, value);
+            table[index] = new QuadraticProbingHashTableNode<>(key, value); //Put the element into an empty slot at computed index.
             size++;
 
-            if (size >= threshold) {
+            if (size >= threshold) { //Upsize if the size of current table exceeds the threshold.
                 Upsize();
             }
         }
     }
 
     public void remove(Key key) {
+        //Firstly, compute the index.
         int index = getIndex(key, capacity);
         int i = 0;
 
@@ -80,20 +84,19 @@ public class QuadraticProbingHashTable<Key, Value> {
         }
 
         if (table[index] != null && table[index].key.equals(key)) {
-            table[index] = null;
+            table[index] = null; //Set the slot to null if the key to be deleted was found.
             size--;
 
-            // Re-insert all keys in the cluster starting from the next position
-            // to ensure quadratic probing still works correctly.
+            // Reinsert all the other elements to ensure quadratic probing still works correctly.
             int nextIndex = (index + 1) % capacity;
             while (table[nextIndex] != null) {
                 QuadraticProbingHashTableNode<Key, Value> node = table[nextIndex];
-                table[nextIndex] = null;
+                table[nextIndex] = null; //Set the current slot where the element is to null.
                 size--;
-                put(node.key, node.value);
+                put(node.key, node.value); //Put it into table with its new index as the size changed.
                 nextIndex = (nextIndex + 1) % capacity;
                 if (size < min_lf * capacity) {
-                    Downsize();
+                    Downsize(); //Downsize the table if its size is less than the minimal load factor multiplied by capacity of current table.
                 }
             }
         }
@@ -108,6 +111,7 @@ public class QuadraticProbingHashTable<Key, Value> {
             index = (index + i * i) % capacity;
         }
 
+        //After the index is computed, search for the key and return its value, else return null.
         if (table[index] != null && table[index].key.equals(key)) {
             return table[index].value;
         } else {
@@ -117,49 +121,47 @@ public class QuadraticProbingHashTable<Key, Value> {
 
 
     private void Upsize() {
-        int newCapacity = capacity * 2;
-        QuadraticProbingHashTableNode<Key, Value>[] newTable = new QuadraticProbingHashTableNode[newCapacity];
-        size = 0;
+        int newCapacity = capacity * 2; //Double the current capacity.
+        threshold = (int) (newCapacity * loadFactor);
+        QuadraticProbingHashTableNode<Key, Value>[] newTable = new QuadraticProbingHashTableNode[newCapacity]; //Create the new, bigger table.
 
+        //Rehashing of all the current elements.
         for (int i = 0; i < capacity; i++) {
-            QuadraticProbingHashTableNode<Key, Value> node = table[i];
-            if (node != null) {
-                int index = getIndex(node.key, newCapacity);
-                int j = 0;
+            if (table[i] != null) {
+                int index = getIndex(table[i].key, newCapacity);
+                int j = 1;
                 while (newTable[index] != null) {
-                    j++;
                     index = (index + j * j) % newCapacity;
+                    j++;
                 }
-                newTable[index] = node;
+                newTable[index] = table[i];
             }
         }
 
-
+        //Update the variables table and capacity.
         table = newTable;
         capacity = newCapacity;
-        threshold = (int) (capacity * loadFactor);
     }
 
     private void Downsize() {
-        int newCapacity = capacity / 2;
+        int newCapacity = capacity / 2; //Halve the current capacity.
+        threshold = (int) (newCapacity * loadFactor);
         QuadraticProbingHashTableNode<Key, Value>[] newTable = (QuadraticProbingHashTableNode<Key, Value>[]) new QuadraticProbingHashTableNode[newCapacity];
 
         for (int i = 0; i < capacity; i++) {
-            QuadraticProbingHashTableNode<Key, Value> node = table[i];
-            if (node != null) {
-                int index = getIndex(node.key, newCapacity);
-                int j = 0;
+            if (table[i] != null) {
+                int index = getIndex(table[i].key, newCapacity);
+                int j = 1;
                 while (newTable[index] != null) {
-                    j++;
                     index = (index + j * j) % newCapacity;
+                    j++;
                 }
-                newTable[index] = node;
+                newTable[index] = table[i];
             }
         }
-
+        //Update the variables table and capacity.
         table = newTable;
         capacity = newCapacity;
-        threshold = (int) (capacity * loadFactor);
     }
 
     //------------------------------------------------just print f-------------------------------------------------//

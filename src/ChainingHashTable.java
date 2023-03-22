@@ -1,3 +1,6 @@
+//The implementation of the hash table with separate chaining collision resolution and its functionalities: put, remove, and get.
+//Petra Miková, ID: 120852, summer term 22/23 - DSA
+
 public class ChainingHashTable<Key, Value> {
      static class ChainingHashTableNode<Key, Value> {
         Key key;
@@ -5,7 +8,7 @@ public class ChainingHashTable<Key, Value> {
         ChainingHashTableNode<Key, Value> next;
 
 
-         public ChainingHashTableNode(Key key, Value value) { //constructor
+         public ChainingHashTableNode(Key key, Value value) { //Constructor for a "node" in a hash table.
             this.key = key;
             this.value = value;
             this.next = null;
@@ -25,18 +28,18 @@ public class ChainingHashTable<Key, Value> {
         this.loadFactor = def_lf;
         this.capacity = def_capacity;
         this.threshold = (int) (capacity * loadFactor);
-        this.table = (ChainingHashTableNode<Key, Value>[]) new ChainingHashTableNode[capacity]; //create a hash table with the nodes and a capacity given
+        this.table = (ChainingHashTableNode<Key, Value>[]) new ChainingHashTableNode[capacity]; //Create a hash table with the nodes and a capacity given.
         this.size = 0;
     }
 
 
-    private int hash(String key, int capacity) {
+    private int hash(String key, int capacity) { //A hash method that takes the hashcode computed and modulo it with capacity to return the index for key.
         int hashCode = hashFunction(key);
         int index = hashCode % capacity;
-        return index < 0 ? index + capacity : index;
+        return index < 0 ? index + capacity : index; //To overcome getting outbound index errors.
     }
 
-    private int hashFunction(String key) {
+    private int hashFunction(String key) { //A hashing function inspired with FNV1 hashing function.
         int hash = 0x811c9dc5;
         for (int i = 0; i < key.length(); i++) {
             hash ^= key.charAt(i);
@@ -45,7 +48,7 @@ public class ChainingHashTable<Key, Value> {
         return hash;
     }
 
-    private int getIndex(Key key, int capacity){
+    private int getIndex(Key key, int capacity){ //Index getter method - simply returns the index.
         int index = hash(key.toString(),capacity);
         return index;
     }
@@ -53,17 +56,17 @@ public class ChainingHashTable<Key, Value> {
     public void put(Key key, Value value) {
         int index = getIndex(key, capacity);
         ChainingHashTableNode<Key, Value> node = table[index];
-        while (node != null && !node.key.equals(key)) { //chain
+        while (node != null && !node.key.equals(key)) { //Separate chaining, traverse the linked list and add the new element at the end of it.
             node = node.next;
         }
-        if (node != null) { // key found in chain, update value
+        if (node != null) { //If the key was found in chain, update its value.
             node.value = value;
-        } else { // key not found in chain, add new node to front of chain
+        } else { //If the key was not found in chain, add new node to front of chain.
             ChainingHashTableNode<Key, Value> newNode = new ChainingHashTableNode<>(key, value);
             newNode.next = table[index];
             table[index] = newNode;
             size++;
-            if (size >= threshold) {
+            if (size >= threshold) { //Upsize if the size of current table exceeds the threshold.
                 Upsize();
             }
         }
@@ -72,18 +75,18 @@ public class ChainingHashTable<Key, Value> {
         int index = getIndex(key,capacity);
         ChainingHashTableNode<Key,Value> node = table[index];
         ChainingHashTableNode<Key, Value> prevNode = null;
-        while (node != null) {
-            if (node.key.equals(key)) {
-                if (prevNode == null) table[index] = node.next;
+        while (node != null) { //Traverse the linked list in slot at computed index.
+            if (node.key.equals(key)) { //If the element to be deleted was found.
+                if (prevNode == null) table[index] = node.next; //Case where element is the root of linked list at the slot.
                 else {
-                    prevNode.next = node.next;
+                    prevNode.next = node.next; //Else skip over the current node in each iteration with the previous node's pointer.
                 }
                 size--;
                 if (size < min_lf * capacity) {
-                    Downsize();
+                    Downsize(); //Downsize the table if its size is less than the minimal load factor multiplied by capacity of current table.
                 }
             }
-            prevNode = node;
+            prevNode = node; //Update the pointers in each iteration.
             node = node.next;
         }
     }
@@ -91,7 +94,7 @@ public class ChainingHashTable<Key, Value> {
     public Value get(Key key) {
         int index = getIndex(key,capacity);
         ChainingHashTableNode<Key, Value> node = table[index];
-        while (node != null) {
+        while (node != null) { //Loop through the "chain" at given index and return the element's value found or null if there was no such element found.
             if (node.key.equals(key)) {
                 System.out.println(node.value);
                 return node.value;
@@ -103,11 +106,12 @@ public class ChainingHashTable<Key, Value> {
 
 
     private void Upsize() {
-        int newCapacity = capacity * 2;
+        int newCapacity = capacity * 2; //Double the current capacity.
         threshold = (int) (newCapacity * loadFactor);
-        ChainingHashTableNode<Key, Value>[] newTable = new ChainingHashTableNode[newCapacity];
+        ChainingHashTableNode<Key, Value>[] newTable = new ChainingHashTableNode[newCapacity]; //Create the new, bigger table.
 
-        for (int i = 0; i < this.capacity; i++) { //rehashing
+        //Rehashing of all the current elements.
+        for (int i = 0; i < this.capacity; i++) {
             ChainingHashTableNode<Key, Value> node = table[i];
             while (node != null) {
                 ChainingHashTableNode<Key, Value> next = node.next;
@@ -118,16 +122,17 @@ public class ChainingHashTable<Key, Value> {
             }
         }
 
+        //Update the variables table and capacity.
         table = newTable;
         capacity = newCapacity;
-
     }
 
     private void Downsize() {
-        int newCapacity = capacity / 2;
+        int newCapacity = capacity / 2; //Halve the current capacity.
         threshold = (int) (newCapacity * loadFactor);
-        ChainingHashTableNode<Key, Value>[] newTable = new ChainingHashTableNode[newCapacity];
+        ChainingHashTableNode<Key, Value>[] newTable = new ChainingHashTableNode[newCapacity]; //Create the new, smaller table.
 
+        //Rehashing of all the current elements.
         for (int i = 0; i < this.capacity; i++) {
             ChainingHashTableNode<Key, Value> node = table[i];
             while (node != null) {
@@ -140,7 +145,6 @@ public class ChainingHashTable<Key, Value> {
         }
         table = newTable;
         capacity = newCapacity;
-
     }
 
     //------------------------------------------------just print f-------------------------------------------------//

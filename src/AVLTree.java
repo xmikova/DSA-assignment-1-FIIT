@@ -1,4 +1,4 @@
-//The implementation of AVL Tree and its functionalities: insert, delete, and search
+//The implementation of AVL Tree and its functionalities: insert, delete, and search.
 //Petra Miková, ID: 120852, summer term 22/23 - DSA
 
 public class AVLTree {
@@ -9,11 +9,11 @@ public class AVLTree {
         AVLTreeNode left;
         AVLTreeNode right;
 
-        public AVLTreeNode(int element) //constructor for node in AVL tree
+        public AVLTreeNode(int element) //Constructor for a node in AVL tree.
         {
             this.left = null;
             this.right = null;
-            this.height = 1;
+            this.height = 1; //Default height.
             this.element = element;
         }
     }
@@ -29,20 +29,20 @@ public class AVLTree {
     }
 
     private AVLTreeNode insert(AVLTreeNode root, int element) {
-        if (root == null) { //if tree does not exist
+        if (root == null) { //If tree does not exist, return a newly created element.
             return new AVLTreeNode(element);
         }
-        if (element < root.element) { //recursive approach for insert, this is just standard BST insert, no balancing
+        if (element < root.element) { //Recursive approach for insert, this is just standard BST insert without balancing.
             root.left = insert(root.left, element);
         } else if (element > root.element) {
             root.right = insert(root.right, element);
-        } else { //duplicate keys are not allowed
+        } else { //Duplicate keys are not allowed, this is resolved by simply returning root.
             return root;
         }
 
-        root.height = 1 + Math.max(getHeight(root.left), getHeight(root.right)); //update the height of this node as new node could be added as its child
-        int balance = getBalance(root); //get the balance factor of this node
-        return BalanceAVLTree(root, balance); //balance the tree
+        root.height = 1 + Math.max(getHeight(root.left), getHeight(root.right)); //Updating the height of this node as new node could be added as its child.
+        int balance = getBalance(root); //Get the balance factor of this node.
+        return BalanceAVLTree(root, balance); //Eventually, balance the tree.
     }
 
     public void delete(int element) {
@@ -50,69 +50,68 @@ public class AVLTree {
     }
 
     private AVLTreeNode delete(AVLTreeNode root, int element) {
-        if (root == null) {
+        if (root == null) { //If the tree does not exist, returt root (null).
             return root;
         }
 
-        if (element < root.element) { //traverse recursively until node we want to delete is found
+        if (element < root.element) { //Traverse the tree recursively until parent of node we want to delete is found.
             root.left = delete(root.left, element);
         } else if (element > root.element) {
             root.right = delete(root.right, element);
-            //code below now only happens if we found the element to be deleted
-        } else if ((root.left == null) && (root.right != null)){ //if node has only right child
+            //Code below now only happens if we found the element to be deleted.
+        } else if ((root.left == null) && (root.right != null)){ //Case where node has only right child.
             root = root.right;
-        } else if ((root.right == null) && (root.left != null)){ //if node has only left child
+        } else if ((root.right == null) && (root.left != null)){ //Case where node has only left child.
             root = root.left;
-        } else if ((root.left == null) && (root.right == null)){ //if node is childless
+        } else if ((root.left == null) && (root.right == null)){ //Case where node is childless.
             root = null;
-        } else { //if node has two children
-            AVLTreeNode node = Min(root.right); //get the smallest inorder in the right subtree
-            root.element = node.element; //copy its element to the root we deleted
-            root.right = delete(root.right, node.element); //delete the found successor
+        } else { //Case where node has two children.
+            AVLTreeNode node = Min(root.right); //Get the smallest inorder successor in the right subtree.
+            root.element = node.element; //Copy its element to the root that was deleted.
+            root.right = delete(root.right, node.element); //Delete the found successor.
         }
 
-        if (root == null) { //check for when the node we deleted was the only one in the tree
+        if (root == null) { //Check for when the node we deleted was the only one in the tree (avoiding errors).
             return root;
         }
 
-        root.height = 1 + Math.max(getHeight(root.left), getHeight(root.right)); //update the height of the current node
-        int balance = getBalance(root); //get the balance factor of this node
-        // Balance the tree if necessary
-        return BalanceAVLTree(root, balance); //balance the tree
+        root.height = 1 + Math.max(getHeight(root.left), getHeight(root.right)); //Updating the height of this node as the node deleted could be its child.
+        int balance = getBalance(root); //Get the balance factor of this node.
+        return BalanceAVLTree(root, balance); //Balance the tree.
     }
 
 
     private AVLTreeNode BalanceAVLTree(AVLTreeNode node, int balance) {
-        // left left case
+        //1. Left Left case
         if (balance > 1 && (getHeight(node.left.left) >= getHeight(node.left.right))) {
             node = AVLTreeRightRotation(node);
         }
-        // right right case
+        //2. Right Right case
         else if (balance < -1 && (getHeight(node.right.right) >= getHeight(node.right.left))) {
             node = AVLTreeLeftRotation(node);
         }
-        // left right case
+        //3. Left Right case
         else if (balance > 1 && (getHeight(node.left.left) < getHeight(node.left.right))) {
             node.left = AVLTreeLeftRotation(node.left);
             node = AVLTreeRightRotation(node);
         }
-        // right left case
+        //4. Right Left case
         else if (balance < -1 && (getHeight(node.right.right) < getHeight(node.right.left))) {
             node.right = AVLTreeRightRotation(node.right);
             node = AVLTreeLeftRotation(node);
         }
-        return node;
+        return node; //If no balancing is needed, simply return current node.
     }
 
-    private int getHeight(AVLTreeNode node) { //helper function to get height of a node, especially for cases when node is null so that we don´t get error
+    private int getHeight(AVLTreeNode node) { //Helper function to get height of a node, especially for cases when node is null so that we avoid getting errors.
         return (node == null) ? 0 : node.height;
     }
 
-    private int getBalance(AVLTreeNode node) { //helper function to find out whether there is an imbalance after inserting node
+    private int getBalance(AVLTreeNode node) { //Helper function to find out whether there is an imbalance after inserting node.
         return (node == null) ? 0 : getHeight(node.left) - getHeight(node.right);
     }
 
-    private AVLTreeNode AVLTreeRightRotation(AVLTreeNode node) { //method for right rotation
+    private AVLTreeNode AVLTreeRightRotation(AVLTreeNode node) { //Method for right rotation.
         AVLTreeNode leftChild = node.left;
         AVLTreeNode rightGrandchild = leftChild.right;
         leftChild.right = node;
@@ -122,7 +121,7 @@ public class AVLTree {
         return leftChild;
     }
 
-    private AVLTreeNode AVLTreeLeftRotation(AVLTreeNode node) { //method for left rotation
+    private AVLTreeNode AVLTreeLeftRotation(AVLTreeNode node) { //Method for left rotation.
         AVLTreeNode rightChild = node.right;
         AVLTreeNode leftGrandchild = rightChild.left;
         rightChild.left = node;
@@ -133,7 +132,7 @@ public class AVLTree {
     }
 
 
-    private AVLTreeNode Min(AVLTreeNode node) { //helper function to find node with the minimum value in a subtree rooted at node given
+    private AVLTreeNode Min(AVLTreeNode node) { //Helper function to find node with the minimum value in a subtree rooted at node given (used in delete function).
         AVLTreeNode current = node;
 
         while (current.left != null)
@@ -150,7 +149,7 @@ public class AVLTree {
         if (root == null) {
             return null;
         }
-        if (element < root.element) {
+        if (element < root.element) { //Recursively traverse the tree and return found root (returns null if node does not exist in the tree).
             return search(root.left, element);
         } else if (element > root.element) {
             return search(root.right, element);
@@ -158,8 +157,6 @@ public class AVLTree {
             return root;
         }
     }
-
-
 
 
 //---------------------------------------------------------------------------------------------------------------------//
