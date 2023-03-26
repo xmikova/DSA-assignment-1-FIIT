@@ -87,7 +87,7 @@ public class QuadraticProbingHashTable<Key, Value> {
             table[index] = null; //Set the slot to null if the key to be deleted was found.
             size--;
 
-            // Reinsert all the other elements to ensure quadratic probing still works correctly.
+            //Reinsert all the other elements to ensure quadratic probing still works correctly.
             int nextIndex = (index + 1) % capacity;
             while (table[nextIndex] != null) {
                 QuadraticProbingHashTableNode<Key, Value> node = table[nextIndex];
@@ -101,6 +101,7 @@ public class QuadraticProbingHashTable<Key, Value> {
             }
         }
     }
+
 
     public Value get(Key key) {
         int index = getIndex(key, capacity);
@@ -159,6 +160,7 @@ public class QuadraticProbingHashTable<Key, Value> {
                 newTable[index] = table[i];
             }
         }
+
         //Update the variables table and capacity.
         table = newTable;
         capacity = newCapacity;
