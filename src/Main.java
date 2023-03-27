@@ -1,4 +1,4 @@
-//The main class implementation with all the testing scenarios required for this assignment.
+//The main class implementation with all the testing scenarios for this assignment.
 //Petra Miková, ID: 120852, summer term 22/23 - DSA
 
 import java.util.Random;
@@ -81,7 +81,7 @@ public class Main {
                     System.out.println("Delete: " + totalAVLdelete2);
 
                     for (int j = numOfNodesAVL2; j < i; j++) {
-                        AVLTree2.insert(numbers[j]); //Reinsert the nodes to test the delete properly.
+                        AVLTree2.insert(numbers[j]); //Reinsert the nodes to test the delete properly (done in all the other scenarios like this one as well).
                     }
 
                     numOfNodesAVL2 = i;
@@ -170,7 +170,7 @@ public class Main {
                 }
 
                 ChainingHashTable<String,Integer> ChainingHashTable2 = new ChainingHashTable<>();
-                System.out.println("Hash Table with separate chaining collision resolution insertion of 10M keys in 50K keys intervals, then searching 50000 keys in each interval and then deleting 10000 keys in each interval:");
+                System.out.println("Hash Table with separate chaining collision resolution insertion of 10M keys in 50K keys intervals, then searching 50K keys in each interval and then deleting 50K keys in each interval:");
                 long startHTSCHput2, endHTSCHput2, totalHTSCHput2, startHTSCHget2, endHTSCHget2, totalHTSCHget2, startHTSCHremove2, endHTSCHremove2, totalHTSCHremove2;
                 int intervalHTSCH2 = 50000;
                 int numOfNodesHTSCH2 = 0;
@@ -281,12 +281,12 @@ public class Main {
         final String chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         Random random = new Random();
 
-        StringBuilder sb = new StringBuilder(length);
+        StringBuilder string = new StringBuilder(length);
         for (int i = 0; i < length; i++) {
             int randomIndex = random.nextInt(chars.length());
-            sb.append(chars.charAt(randomIndex));
+            string.append(chars.charAt(randomIndex));
         }
 
-        return sb.toString();
+        return string.toString();
     }
 }

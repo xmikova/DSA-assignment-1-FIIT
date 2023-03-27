@@ -41,8 +41,8 @@ public class QuadraticProbingHashTable<Key, Value> {
     private int hashFunction(String key) { //A hashing function inspired with FNV1 hashing function.
         int hash = 0x811c9dc5;
         for (int i = 0; i < key.length(); i++) {
-            hash ^= key.charAt(i);
-            hash *= 0x01000193;
+            hash ^= key.charAt(i); //XOR the hash with character at ith position in key.
+            hash *= 0x01000193; //Multiply the hash with a huge prime.
         }
         return hash;
     }
@@ -87,7 +87,7 @@ public class QuadraticProbingHashTable<Key, Value> {
             table[index] = null; //Set the slot to null if the key to be deleted was found.
             size--;
 
-            //Reinsert all the other elements to ensure quadratic probing still works correctly.
+            //Reinsert all the other keys to ensure quadratic probing still works correctly.
             int nextIndex = (index + 1) % capacity;
             while (table[nextIndex] != null) {
                 QuadraticProbingHashTableNode<Key, Value> node = table[nextIndex];
@@ -101,7 +101,6 @@ public class QuadraticProbingHashTable<Key, Value> {
             }
         }
     }
-
 
     public Value get(Key key) {
         int index = getIndex(key, capacity);
@@ -120,13 +119,12 @@ public class QuadraticProbingHashTable<Key, Value> {
         }
     }
 
-
     private void Upsize() {
         int newCapacity = capacity * 2; //Double the current capacity.
         threshold = (int) (newCapacity * loadFactor);
         QuadraticProbingHashTableNode<Key, Value>[] newTable = new QuadraticProbingHashTableNode[newCapacity]; //Create the new, bigger table.
 
-        //Rehashing of all the current elements.
+        //Rehashing of all the current keys.
         for (int i = 0; i < capacity; i++) {
             if (table[i] != null) {
                 int index = getIndex(table[i].key, newCapacity);

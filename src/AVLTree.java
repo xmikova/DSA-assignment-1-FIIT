@@ -50,7 +50,7 @@ public class AVLTree {
     }
 
     private AVLTreeNode delete(AVLTreeNode root, int element) {
-        if (root == null) { //If the tree does not exist, returt root (null).
+        if (root == null) { //If the tree does not exist, return root (null).
             return root;
         }
 

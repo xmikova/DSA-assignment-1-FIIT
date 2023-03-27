@@ -24,7 +24,7 @@ public class RedBlackTree {
     }
 
 
-    public void insert(int element) { //
+    public void insert(int element) { //A public function insert that iteratively traverses the tree and inserts a node, then balances the tree.
         RedBlackTreeNode newRedBlackTreeNode = new RedBlackTreeNode(element); //Create a new node colored red.
 
         RedBlackTreeNode parent = null; // An iterative approach to standard BST insertion, no balancing yet.
@@ -262,7 +262,6 @@ public class RedBlackTree {
             node.Red = false;
         }
     }
-
 
     public void search(int element){
         RedBlackTreeNode found = search(root, element);
