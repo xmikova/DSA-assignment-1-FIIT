@@ -3,7 +3,7 @@
 
 public class AVLTree {
 
-    static class AVLTreeNode{
+    static class AVLTreeNode {
         int element;
         int height;
         AVLTreeNode left;
@@ -20,7 +20,7 @@ public class AVLTree {
 
     AVLTreeNode root;
 
-    AVLTree(){ //AVL tree constructor
+    AVLTree() { //AVL tree constructor
         root = null;
     }
 
@@ -59,11 +59,11 @@ public class AVLTree {
         } else if (element > root.element) {
             root.right = delete(root.right, element);
             //Code below now only happens if we found the element to be deleted.
-        } else if ((root.left == null) && (root.right != null)){ //Case where node has only right child.
+        } else if ((root.left == null) && (root.right != null)) { //Case where node has only right child.
             root = root.right;
-        } else if ((root.right == null) && (root.left != null)){ //Case where node has only left child.
+        } else if ((root.right == null) && (root.left != null)) { //Case where node has only left child.
             root = root.left;
-        } else if ((root.left == null) && (root.right == null)){ //Case where node is childless.
+        } else if ((root.left == null) && (root.right == null)) { //Case where node is childless.
             root = null;
         } else { //Case where node has two children.
             AVLTreeNode node = Min(root.right); //Get the smallest inorder successor in the right subtree.
@@ -141,11 +141,11 @@ public class AVLTree {
         return current;
     }
 
-    public void search(int element){
+    public void search(int element) {
         AVLTreeNode found = search(root, element);
     }
 
-    private AVLTreeNode search(AVLTreeNode root, int element){
+    private AVLTreeNode search(AVLTreeNode root, int element) {
         if (root == null) {
             return null;
         }
@@ -157,37 +157,4 @@ public class AVLTree {
             return root;
         }
     }
-
-
-//---------------------------------------------------------------------------------------------------------------------//
-    //just traversals there//
-
-    void inorder() {
-        inorder_Recursive(root);
-    }
-
-    // recursively traverse the BST
-    void inorder_Recursive(AVLTreeNode root) {
-        if (root != null) {
-            inorder_Recursive(root.left);
-            System.out.print(root.element + " ");
-            inorder_Recursive(root.right);
-        }
-    }
-
-    void printPreorder() {
-        printPreorder(root);
-        System.out.println();
-    }
-
-    void printPreorder(AVLTreeNode node) {
-        if (node == null) {
-            return;
-        }
-        System.out.print(node.element + " ");
-        printPreorder(node.left);
-        printPreorder(node.right);
-    }
 }
-
-

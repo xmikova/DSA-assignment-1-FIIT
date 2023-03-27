@@ -280,24 +280,4 @@ public class RedBlackTree {
             return root;
         }
     }
-
-
-
-//---------------------------just traversals down there--------------------------------------------------------------//
-
-
-    void printPreorder(RedBlackTreeNode node) {
-        if (node != null) {
-            System.out.print(node.element + " ");
-            printPreorder(node.left);
-            printPreorder(node.right);
-        }
-    }
-
-    // Wrapper method for starting the pre-order traversal from the root node
-    void printPreorder() {
-        printPreorder(root);
-    }
-
-
 }

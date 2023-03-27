@@ -96,7 +96,6 @@ public class ChainingHashTable<Key, Value> {
         ChainingHashTableNode<Key, Value> node = table[index];
         while (node != null) { //Loop through the "chain" at given index and return the element's value found or null if there was no such element found.
             if (node.key.equals(key)) {
-                System.out.println(node.value);
                 return node.value;
             }
             node = node.next;
@@ -146,25 +145,4 @@ public class ChainingHashTable<Key, Value> {
         table = newTable;
         capacity = newCapacity;
     }
-
-    //------------------------------------------------just print f-------------------------------------------------//
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < capacity; i++) {
-            ChainingHashTableNode<Key, Value> node = table[i];
-            sb.append("Bucket ").append(i).append(": ");
-            while (node != null) {
-                sb.append("(").append(node.key).append(", ").append(node.value).append(")");
-                if (node.next != null) {
-                    sb.append(" -> ");
-                }
-                node = node.next;
-            }
-            sb.append("\n");
-        }
-        return sb.toString();
-    }
 }
-
-

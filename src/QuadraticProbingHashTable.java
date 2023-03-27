@@ -47,8 +47,8 @@ public class QuadraticProbingHashTable<Key, Value> {
         return hash;
     }
 
-    private int getIndex(Key key, int capacity){ //Index getter method - simply returns the index.
-        int index = hash(key.toString(),capacity);
+    private int getIndex(Key key, int capacity) { //Index getter method - simply returns the index.
+        int index = hash(key.toString(), capacity);
         return index;
     }
 
@@ -64,7 +64,7 @@ public class QuadraticProbingHashTable<Key, Value> {
         if (table[index] != null && table[index].key.equals(key)) {
             table[index].value = value; //Update the value if the key is equal to the one in the slot.
         } else {
-            table[index] = new QuadraticProbingHashTableNode<>(key, value); //Put the element into an empty slot at computed index.
+            table[index] = new QuadraticProbingHashTableNode<>(key, value); //Put the key into an empty slot at computed index.
             size++;
 
             if (size >= threshold) { //Upsize if the size of current table exceeds the threshold.
@@ -91,7 +91,7 @@ public class QuadraticProbingHashTable<Key, Value> {
             int nextIndex = (index + 1) % capacity;
             while (table[nextIndex] != null) {
                 QuadraticProbingHashTableNode<Key, Value> node = table[nextIndex];
-                table[nextIndex] = null; //Set the current slot where the element is to null.
+                table[nextIndex] = null; //Set the current slot where the key is to null.
                 size--;
                 put(node.key, node.value); //Put it into table with its new index as the size changed.
                 nextIndex = (nextIndex + 1) % capacity;
@@ -164,24 +164,5 @@ public class QuadraticProbingHashTable<Key, Value> {
         //Update the variables table and capacity.
         table = newTable;
         capacity = newCapacity;
-    }
-
-    //------------------------------------------------just print f-------------------------------------------------//
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < capacity; i++) {
-           QuadraticProbingHashTableNode<Key, Value> node = table[i];
-            sb.append("Bucket ").append(i).append(": ");
-            while (node != null) {
-                sb.append("(").append(node.key).append(", ").append(node.value).append(")");
-                if (node.next != null) {
-                    sb.append(" -> ");
-                }
-                node = node.next;
-            }
-            sb.append("\n");
-        }
-        return sb.toString();
     }
 }

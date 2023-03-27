@@ -4,11 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="75cecb0a-929e-4b2e-8a73-8dcd4d077c2f" name="Changes" comment="not really pretty test file">
+    <list default="true" id="75cecb0a-929e-4b2e-8a73-8dcd4d077c2f" name="Changes" comment="working test file with comments">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/AVLTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/AVLTree.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ChainingHashTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ChainingHashTable.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/QuadraticProbingHashTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/QuadraticProbingHashTable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RedBlackTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RedBlackTree.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -233,7 +235,14 @@
       <option name="project" value="LOCAL" />
       <updated>1679791104200</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="working test file with comments">
+      <created>1679873387273</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1679873387273</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -266,7 +275,8 @@
     <MESSAGE value="uncommented final v" />
     <MESSAGE value="Fully commented data structures implementations + first proposal of testing file" />
     <MESSAGE value="not really pretty test file" />
-    <option name="LAST_COMMIT_MESSAGE" value="not really pretty test file" />
+    <MESSAGE value="working test file with comments" />
+    <option name="LAST_COMMIT_MESSAGE" value="working test file with comments" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
