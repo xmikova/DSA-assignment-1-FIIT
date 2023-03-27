@@ -1,1 +1,2 @@
 # DSA
+A school assignment on data structures which involved implementing two binary search trees with different balancing algorithms and two hash tables with different collision handling resolutions. My implementation includes an AVL tree, RB tree, Separate Chaining hash table, and Quadratic probing hash table with the operations insert, delete, search, as well as a test file for testing the time complexity of implementations.
